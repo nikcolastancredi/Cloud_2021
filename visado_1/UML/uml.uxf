@@ -1,10 +1,6 @@
-<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>40</x><y>20</y><w>370</w><h>400</h></coordinates><panel_attributes>&lt;&lt;Unquify&gt;&gt;
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>40</x><y>0</y><w>370</w><h>400</h></coordinates><panel_attributes>&lt;&lt;Unquify&gt;&gt;
 --
 - id: int
-- artists: [ ]
-- playlists:[ ]
-#Operation(i: int): int
-/+AbstractOperation()/
 --
 Responsibilities
 + addArtist(artistData): Artist
@@ -19,40 +15,37 @@ Responsibilities
 + createPlaylist(name, genresToInclude, maxDuration)
 + removeArtist(artist)
 + removeAlbum(album)
-+ removeTrack(track)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>30</x><y>510</y><w>230</w><h>250</h></coordinates><panel_attributes>&lt;&lt;Playlist&gt;&gt;
++ removeTrack(track)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>30</x><y>490</y><w>230</w><h>250</h></coordinates><panel_attributes>&lt;&lt;Playlist&gt;&gt;
 --
 id: int
 name: String
-tracks: [ ]
 --
 Responsibilities
 duration()
 hasTrack(aTrack)
 setName(name)
 addTrack(aTrack)
-removeTrack(aTrack)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>990</x><y>640</y><w>180</w><h>220</h></coordinates><panel_attributes>&lt;&lt;Artist&gt;&gt;
+removeTrack(aTrack)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>990</x><y>620</y><w>180</w><h>220</h></coordinates><panel_attributes>&lt;&lt;Artist&gt;&gt;
 --
 name: String
 country: String
 id: int
-albums: [ ]
 --
 Responsibilities:
 + setName(name)
 + setCountry(country)
 + addAlbum(album)
-+ removeAlbum(album)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>300</x><y>660</y><w>220</w><h>210</h></coordinates><panel_attributes>&lt;&lt;Album&gt;&gt;
++ removeAlbum(album)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>300</x><y>640</y><w>220</w><h>210</h></coordinates><panel_attributes>&lt;&lt;Album&gt;&gt;
 --
 name: String
 year: int
 id: int
-tracks: [ ]
 --
 Responsibilities
 + removeTrack(track)
 + addTrack(track): Track
 + setName(name)
-+setYear(int)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>720</x><y>640</y><w>180</w><h>200</h></coordinates><panel_attributes>&lt;&lt;Track&gt;&gt;
++setYear(int)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>720</x><y>620</y><w>180</w><h>200</h></coordinates><panel_attributes>&lt;&lt;Track&gt;&gt;
 --
 name: String
 duration: int
@@ -62,16 +55,19 @@ id: Number
 Responsibilities
 setName(name)
 setDuration(int)
-addGenre(genre)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>140</x><y>410</y><w>150</w><h>120</h></coordinates><panel_attributes>lt=-
+addGenre(genre)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>140</x><y>390</y><w>150</w><h>120</h></coordinates><panel_attributes>lt=-
 m1=0..1
 m2=0..n
-playlists &gt;</panel_attributes><additional_attributes>130;10;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>400</x><y>90</y><w>760</w><h>570</h></coordinates><panel_attributes>lt=-
+playlists &gt;</panel_attributes><additional_attributes>130;10;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>400</x><y>70</y><w>760</w><h>570</h></coordinates><panel_attributes>lt=-
 m1=0..n
 m2=0..1
-Artist</panel_attributes><additional_attributes>710;550;710;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>330</x><y>850</y><w>860</w><h>80</h></coordinates><panel_attributes>lt=-
+Artist</panel_attributes><additional_attributes>710;550;710;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>330</x><y>830</y><w>860</w><h>80</h></coordinates><panel_attributes>lt=-
 m1=0..1
 m2=0..n
-&lt; Albums</panel_attributes><additional_attributes>820;10;820;60;10;60;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>510</x><y>720</y><w>230</w><h>50</h></coordinates><panel_attributes>lt=-
+&lt; Albums</panel_attributes><additional_attributes>820;10;820;60;10;60;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>510</x><y>700</y><w>230</w><h>50</h></coordinates><panel_attributes>lt=-
 m1=0..n
 m2=0..1
-Tracks &gt;</panel_attributes><additional_attributes>210;20;10;20</additional_attributes></element></diagram>
+Tracks &gt;</panel_attributes><additional_attributes>210;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>250</x><y>510</y><w>590</w><h>130</h></coordinates><panel_attributes>lt=-
+m1=0..1
+m2=0..n
+&lt; Traks</panel_attributes><additional_attributes>530;110;530;10;10;10</additional_attributes></element></diagram>
