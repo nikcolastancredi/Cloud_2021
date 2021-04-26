@@ -53,27 +53,33 @@ function main() {
   process.argv.forEach(argument => console.log(argument));
 
   const args = process.argv
+  const commandIn = process.argv.slice(2).shift();
+  let unqfy = getUNQfy();
+
   //los primeros dos arg estan reservados para main y node
-  if(args[2]==='addArtist'){
+    if(commandIn ==='addArtist'){
    console.log('se llama a la funcion addArtist')
    
-   const artistData = JSON.parse(`{"name": "${args[3]}", "country": "${args[4]}" }`);
+   let artistData = new Object();
+   artistData.name = process.argv.slice(3).shift();
+   artistData.country = process.argv.slice(4).shift();
 
-   let unqfy = getUNQfy();
- 
+   
    try{
-     const artist = unqfy.addArtist(artistData);
+     let artist = unqfy.addArtist(artistData);
      console.log(artist.name + ' ha sido añadido con éxito!');}
    catch(error){
      console.log(error.message);
    }
- 
-   saveUNQfy(unqfy); 
+   
   }
 
+  saveUNQfy(unqfy); 
 
 
 
 }
+
+
 
 main();
