@@ -22,10 +22,12 @@ module.exports= class Artist{
   }
 
   addAlbum(album){
-    if(this._albums.find(a=>a===album)===undefined){
-      this._albums.push(album);}
+    if(this._albums.some(a => a.name===album.name)){
+      throw albumAlreadyExistsError; 
+    }
     else{
-      throw albumAlreadyExistsError;
+       this._albums.push(album);
+
     }
   }
 
@@ -33,7 +35,7 @@ module.exports= class Artist{
     if(this._albums.find(a=>a===album)!==undefined){
       this._albums.pop(album);
     }
-    else{
+    else {
       throw albumDoesNotExistError;
     }
   }

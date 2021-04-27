@@ -52,18 +52,15 @@ function main() {
   //esto no hace nada, imprime los argumentos que entraron nada mas
   process.argv.forEach(argument => console.log(argument));
 
-  const args = process.argv
+  
   const commandIn = process.argv.slice(2).shift();
   let unqfy = getUNQfy();
 
   //los primeros dos arg estan reservados para main y node
     if(commandIn ==='addArtist'){
    console.log('se llama a la funcion addArtist')
-   
-   let artistData = new Object();
-   artistData.name = process.argv.slice(3).shift();
-   artistData.country = process.argv.slice(4).shift();
 
+   const artistData = {name: process.argv.slice(3).shift(), country: process.argv.slice(4).shift()};
    
    try{
      let artist = unqfy.addArtist(artistData);
