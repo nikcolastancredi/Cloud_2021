@@ -60,7 +60,7 @@ function main() {
     if(commandIn ==='addArtist'){
    console.log('se llama a la funcion addArtist')
    
-   let artistData = new Object();
+   const artistData = new Object();
    artistData.name = process.argv.slice(3).shift();
    artistData.country = process.argv.slice(4).shift();
 
