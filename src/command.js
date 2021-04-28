@@ -1,10 +1,12 @@
 const CommandDoesNotExistsError = require("./errores/CommandDoesNotExistsError");
+const CommandIncompleteError = require("./errores/CommandDoesNotExistsError");
 
 class Command {
 
     constructor() {
         this.commandList = {
             addArtist: this.addArtistFunction,
+            addAlbum: this.addAlbumFunction,
         };
     }
 
@@ -21,7 +23,19 @@ class Command {
 
     addArtistFunction(parameters, unqfy) {
 
+		//TODO aca habria que validar tambien la longitud de campos. Ver posibilidades de extraer a una funcion auxiliar si es necesario
         console.log(unqfy.addArtist({name: parameters[1], country: parameters[2]}));
+    }
+
+    addAlbumFunction(parameters, unqfy) {
+		if (parameters.length === 4) {
+			
+			console.log(unqfy.addAlbum(parseInt(parameters[1]), {name: parameters[2], year: parameters[3]}));
+		} else {
+			
+			throw new CommandIncompleteError(parameters[0], 3);
+		}
+        
     }
 }
 
