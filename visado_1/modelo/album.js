@@ -1,7 +1,7 @@
 module.exports= class album{
 
-  constructor(name, year){
-    this._id= Math.floor(Math.random()*100);
+  constructor(name, year,id){
+    this._id= id;
     this._name=name;
     this._year=year;
   }
@@ -13,5 +13,7 @@ module.exports= class album{
     return this._name;
   }
 
-  
+  get year(){
+    return this._year;
+  }
 };

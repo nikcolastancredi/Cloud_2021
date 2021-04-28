@@ -54,13 +54,16 @@ class UNQfy {
   /* Crea un album y lo agrega al artista con id artistId. El objeto album creado debe tener (al menos):
      - una propiedad name (string)
      - una propiedad year (number) */
-    const newAlbum = new album (albumData.name, albumData.year);
-    if(this.getArtistById!==undefined){
-      this.getArtistById(artistId).addAlbum(newAlbum);
-      return newAlbum;
+    const newAlbum = new album (albumData.name, albumData.year, this.nextId);
+    const artist = this.getArtistById(artistId)
+    if(artist===undefined){
+      throw artistDoesNotExistError;
     }
     else {
-      throw artistDoesNotExistError;}
+      artist.addAlbum(newAlbum);
+      this.nextId = this.nextId+1;
+      return newAlbum;
+    }
   }
   
 
@@ -81,11 +84,16 @@ class UNQfy {
   }
 
   getArtistById(id) {
-    if((typeof(this.artists.find(artist=> artist.id===id)) === undefined )){
+
+    const artist = this._artists.find(a => a.id === id);
+
+    if(artist === undefined){
       throw new artistDoesNotExistError;
     }
     else{
-      return (this.artists.find(artist=> artist.id===id));}
+      return artist;
+
+    }
   }
 
   getAlbumById(id) {
