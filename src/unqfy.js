@@ -14,9 +14,15 @@ class UNQfy {
   constructor(){
     this._artists = [];
     this.playlists = [];
-    this.nextId = 0;
+    this.uniqueId = 0;
  
   }
+
+  getUniqueId() {
+    this.uniqueId = this.uniqueId + 1;
+    return this.uniqueId;
+  }
+
   // artistData: objeto JS con los datos necesarios para crear un artista
   //   artistData.name (string)
   //   artistData.country (string)
@@ -31,9 +37,8 @@ class UNQfy {
     }
 
     else{
-      const newArtist= new artist(artistData.name,artistData.country, this.nextId);
+      const newArtist= new artist(artistData.name,artistData.country, this.getUniqueId());
       this._artists.push(newArtist);
-      this.nextId = this.nextId + 1;
       return newArtist;
 
     }
@@ -54,7 +59,7 @@ class UNQfy {
   /* Crea un album y lo agrega al artista con id artistId. El objeto album creado debe tener (al menos):
      - una propiedad name (string)
      - una propiedad year (number) */
-    const newAlbum = new album (albumData.name, albumData.year, this.nextId);
+    const newAlbum = new album (albumData.name, albumData.year, this.getUniqueId());
     const artist = this.getArtistById(artistId)
     if(artist===undefined){
       throw artistDoesNotExistError;

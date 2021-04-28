@@ -1,10 +1,9 @@
-
-
-const fs = require('fs'); // necesitado para guardar/cargar unqfy
-const unqmod = require('./modelo/unqfy'); // importamos el modulo unqfy
+const fs = require("fs"); // necesitado para guardar/cargar unqfy
+const Command = require("./src/command");
+const unqmod = require("./src/unqfy"); // importamos el modulo unqfy
 
 // Retorna una instancia de UNQfy. Si existe filename, recupera la instancia desde el archivo.
-function getUNQfy(filename = 'data.json') {
+function getUNQfy(filename = "data.json") {
   let unqfy = new unqmod.UNQfy();
   if (fs.existsSync(filename)) {
     unqfy = unqmod.UNQfy.load(filename);
@@ -12,7 +11,7 @@ function getUNQfy(filename = 'data.json') {
   return unqfy;
 }
 
-function saveUNQfy(unqfy, filename = 'data.json') {
+function saveUNQfy(unqfy, filename = "data.json") {
   unqfy.save(filename);
 }
 
@@ -46,37 +45,17 @@ function saveUNQfy(unqfy, filename = 'data.json') {
 
 */
 
-
 function main() {
-  console.log('arguments: ');
-  //esto no hace nada, imprime los argumentos que entraron nada mas
-  process.argv.forEach(argument => console.log(argument));
+  const command = new Command();
+  const parameters = process.argv.slice(2); //los primeros dos arg estan reservados para main y node
+  const unqfy = getUNQfy();
 
-  
-  const commandIn = process.argv.slice(2).shift();
-  let unqfy = getUNQfy();
-
-  //los primeros dos arg estan reservados para main y node
-    if(commandIn ==='addArtist'){
-   console.log('se llama a la funcion addArtist')
-
-   const artistData = {name: process.argv.slice(3).shift(), country: process.argv.slice(4).shift()};
-   
-   try{
-     let artist = unqfy.addArtist(artistData);
-     console.log(artist.name + ' ha sido añadido con éxito!');}
-   catch(error){
-     console.log(error.message);
-   }
-   
+  try {
+    command.execute(parameters, unqfy);
+    saveUNQfy(unqfy);
+  } catch (error) {
+    console.log(`${error.name}: ${error.message}` );
   }
-
-  saveUNQfy(unqfy); 
-
-
-
 }
-
-
 
 main();
