@@ -61,7 +61,7 @@ class UNQfy {
     }
     else {
       artist.addAlbum(newAlbum);
-      this.nextId = this.nextId+1;
+      this.nextId = this.nextId + 1;
       return newAlbum;
     }
   }
@@ -74,15 +74,28 @@ class UNQfy {
   //   trackData.genres (lista de strings)
   // retorna: el nuevo track creado
   addTrack(albumId, trackData) {
-  /* Crea un track y lo agrega al album con id albumId. El objeto track creado debe tener (al menos):
+  /* Crea un track y lo agrega al album con id albumId. 
+      El objeto track creado debe tener (al menos):
       - una propiedad name (string),
       - una propiedad duration (number),
       - una propiedad genres (lista de strings)
   */
- const newTrack= new track(trackData.name, trackData.duration, trackData.genres);
- 
+    const newTrack= new track(trackData.name, trackData.duration, trackData.genres,this.nextId);
+    const album =  this.getAlbumById(albumId);
+
+    if(album === undefined){
+      throw albumDoesNotExistError;
+    }
+    else{
+      album.addTrack(newTrack);
+      this.nextId = this.nextId + 1;
+      return newTrack;
+    }
   }
 
+  incrementID(){
+    
+  }
   getArtistById(id) {
 
     const artist = this._artists.find(a => a.id === id);
@@ -96,22 +109,30 @@ class UNQfy {
     }
   }
 
+  
+
   getAlbumById(id) {
+    const album = this.getArtistAlbum(id);
+    return album;
+  }
+
+
+  getArtistAlbum(id) {
     let album = undefined;
-    let i=0;
-    while(typeof(album)===undefined&&i<this.artists.length){
-      album = this.artists[i].find(this.artists[i]===id);
-      i++;
-    }
-    if(typeof(album)!==undefined){
-      return album;
-    } else{
-      throw new albumDoesNotExistError;
-    }
+    this._artists.forEach(a => {
+      const albums = this.getAlbums(id, a.albums);
+      if (albums.length === 1) { album = albums[0]; }
+    });
+    return album;
   }
 
   getTrackById(id) {
 
+  }
+
+  getAlbums(id, albums) {
+    const newAlbums = albums.filter(a => a.id === id);
+    return newAlbums;
   }
 
   getPlaylistById(id) {

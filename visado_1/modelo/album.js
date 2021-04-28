@@ -1,9 +1,12 @@
+const trackAlreadyExistsError= require('./errores/TrackAlreadyExistsError');
+
 module.exports= class album{
 
   constructor(name, year,id){
     this._id= id;
     this._name=name;
     this._year=year;
+    this._tracks = [];
   }
 
   get id(){
@@ -15,5 +18,13 @@ module.exports= class album{
 
   get year(){
     return this._year;
+  }
+
+  addTrack(track){
+    if(this._tracks.some( t => t.name === track.name)){
+      throw trackAlreadyExistsError;
+    }else{
+      this._tracks.push(track);
+    }
   }
 };
