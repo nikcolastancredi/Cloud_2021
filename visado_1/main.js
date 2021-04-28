@@ -59,13 +59,6 @@ function main() {
   //los primeros dos arg estan reservados para main y node
     if(commandIn ==='addArtist'){
    console.log('se llama a la funcion addArtist')
-<<<<<<< HEAD
-   
-   const artistData = new Object();
-   artistData.name = process.argv.slice(3).shift();
-   artistData.country = process.argv.slice(4).shift();
-=======
->>>>>>> origin/master
 
    const artistData = {name: process.argv.slice(3).shift(), country: process.argv.slice(4).shift()};
    
