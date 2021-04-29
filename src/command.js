@@ -6,6 +6,7 @@ class Command {
     this.commandList = {
       addArtist: this.addArtistFunction,
       addAlbum: this.addAlbumFunction,
+      addTrack: this.addTrackFunction,
     };
   }
 
@@ -38,6 +39,20 @@ class Command {
       );
     } else {
       throw new CommandIncompleteError(parameters[0], 3);
+    }
+  }
+
+  addTrackFunction(parameters, unqfy) {
+    if (parameters.length >= 5) {
+      console.log(
+        unqfy.addTrack(parseInt(parameters[1]), {
+          name: parameters[2],
+          duration: parseInt(parameters[3]),
+          genres: parameters.slice(4),
+        })
+      );
+    } else {
+      throw new CommandIncompleteError(parameters[0], 4);
     }
   }
 }

@@ -62,11 +62,10 @@ class UNQfy {
     const newAlbum = new album (albumData.name, albumData.year, this.getUniqueId());
     const artist = this.getArtistById(artistId);
     if(artist===undefined){
-      throw artistDoesNotExistError;
+      throw new artistDoesNotExistError();
     }
     else {
       artist.addAlbum(newAlbum);
-      this.nextId = this.nextId + 1;
       return newAlbum;
     }
   }
@@ -85,22 +84,18 @@ class UNQfy {
       - una propiedad duration (number),
       - una propiedad genres (lista de strings)
   */
-    const newTrack= new track(trackData.name, trackData.duration, trackData.genres,this.nextId);
+    const newTrack= new track(trackData.name, trackData.duration, trackData.genres,this.getUniqueId());
     const album =  this.getAlbumById(albumId);
 
     if(album === undefined){
-      throw albumDoesNotExistError;
+      throw new albumDoesNotExistError();
     }
     else{
       album.addTrack(newTrack);
-      this.nextId = this.nextId + 1;
       return newTrack;
     }
   }
 
-  incrementID(){
-    
-  }
   getArtistById(id) {
 
     const artist = this._artists.find(a => a.id === id);
