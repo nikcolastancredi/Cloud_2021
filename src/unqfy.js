@@ -47,7 +47,7 @@ class UNQfy {
   artistExists(artistData){
     return (this._artists.some(
       artist => artist.name === artistData.name)
-      )
+      );
   }
 
 
@@ -60,7 +60,7 @@ class UNQfy {
      - una propiedad name (string)
      - una propiedad year (number) */
     const newAlbum = new album (albumData.name, albumData.year, this.getUniqueId());
-    const artist = this.getArtistById(artistId)
+    const artist = this.getArtistById(artistId);
     if(artist===undefined){
       throw artistDoesNotExistError;
     }
@@ -183,7 +183,7 @@ class UNQfy {
     const classes = [UNQfy, artist, album, track, albumDoesNotExistError, artistDoesNotExistError, artistExistError];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
-};
+}
 
 // COMPLETAR POR EL ALUMNO: exportar todas las clases que necesiten ser utilizadas desde un modulo cliente
 module.exports = {
