@@ -20,6 +20,11 @@ module.exports= class album{
     return this._year;
   }
 
+  get tracks(){
+    return this._tracks;
+  }
+
+
   addTrack(track){
     if(this._tracks.some( t => t.name === track.name)){
       throw trackAlreadyExistsError;

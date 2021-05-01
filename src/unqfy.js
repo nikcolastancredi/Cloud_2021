@@ -5,6 +5,7 @@ const fs = require('fs'); // para cargar/guarfar unqfy
 const artist = require('./artist');
 const album = require('./album');
 const track = require('./track');
+const playlist = require('./playlist');
 const artistExistError= require('./errores/ArtistAlreadyExistsError');
 const artistDoesNotExistError=require('./errores/ArtistDoesNotExistError');
 const albumDoesNotExistError= require('./errores/AlbumDoesNotExistError');
@@ -142,13 +143,16 @@ class UNQfy {
   // genres: array de generos(strings)
   // retorna: los tracks que contenga alguno de los generos en el parametro genres
   getTracksMatchingGenres(genres) {
-
+    const albumes = this._artists.flatMap(artist => artist.albums);
+    const tracks = albumes.flatMap(album => album.tracks);
+    const trackInGenres = tracks.filter(t => t.genres.some(g => genres.includes(g)));
+    return trackInGenres;
   }
 
   // artistName: nombre de artista(string)
   // retorna: los tracks interpredatos por el artista con nombre artistName
   getTracksMatchingArtist(artistName) {
-
+    return this._artists.filter(artist => artist.name === artistName).flatMap(artist => artist.albums.flatMap(album => album.tracks));
   }
 
 
@@ -163,7 +167,31 @@ class UNQfy {
       * un metodo duration() que retorne la duración de la playlist.
       * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist.
   */
+    try {
+      const idPlaylist = this.getUniqueId();
+      const newPlaylist = new playlist(idPlaylist, name, genresToInclude);
+      ///console.log(newPlaylist);
+      const tracksInGenres = this.getTracksMatchingGenres(genresToInclude);
+      newPlaylist.generateListByTracks(tracksInGenres, maxDuration);
+      this.addPlaylist(newPlaylist);
+      return newPlaylist;
+    } 
+    catch (error) {
+      throw error;
+    }
+  }
 
+  addPlaylist(newPlaylist) {
+    this.playlists.push(newPlaylist);
+  }
+  
+
+  searchByName(name) {
+    const artists = this._artists.filter(artist => artist.name.includes(name));
+    const albums = this._artists.flatMap(artist => artist.albums.filter(album => album.name.includes(name)));
+    const tracks = this._artists.flatMap(artist => artist.albums.flatMap(album => album.tracks.filter(track => track.name.includes(name))));
+    const playlists = this.playlists.filter(playlist => playlist.name.includes(name));
+    return { artists, albums, tracks, playlists };
   }
 
  save(filename) {
