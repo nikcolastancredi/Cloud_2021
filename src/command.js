@@ -1,5 +1,5 @@
 const CommandDoesNotExistsError = require("./errores/CommandDoesNotExistsError");
-const CommandIncompleteError = require("./errores/CommandDoesNotExistsError");
+const CommandIncompleteError = require("./errores/CommandIncompleteError");
 
 class Command {
   constructor() {
