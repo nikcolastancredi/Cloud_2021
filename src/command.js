@@ -7,6 +7,8 @@ class Command {
       addArtist: this.addArtistFunction,
       addAlbum: this.addAlbumFunction,
       addTrack: this.addTrackFunction,
+      getArtistById: this.getArtistByIdFunction,
+      getAlbumById: this.getAlbumByIdFunction
     };
   }
 
@@ -53,6 +55,24 @@ class Command {
       );
     } else {
       throw new CommandIncompleteError(parameters[0], 4);
+    }
+  }
+
+  getArtistByIdFunction(parameters, unqfy) {
+    if (parameters.length >= 2) {
+      console.log(
+        unqfy.getArtistById(parseInt(parameters[1])));
+    } else {
+      throw new CommandIncompleteError(parameters[0], 1);
+    }
+  }
+  
+  getAlbumByIdFunction(parameters, unqfy) {
+    if (parameters.length >= 2) {
+      console.log(
+        unqfy.getAlbumById(parseInt(parameters[1])));
+    } else {
+      throw new CommandIncompleteError(parameters[0], 1);
     }
   }
 }
