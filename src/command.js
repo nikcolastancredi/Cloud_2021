@@ -10,7 +10,9 @@ class Command {
       getArtistById: this.getArtistByIdFunction,
       getAlbumById: this.getAlbumByIdFunction,
       deleteArtist: this.deleteArtistFunction,
-      searchByName: this.searchByNameFunction
+      searchByName: this.searchByNameFunction,
+      createPlaylist : this.createPlaylistFunction
+
     };
   }
 
@@ -98,7 +100,15 @@ class Command {
       throw new CommandIncompleteError(params[0],1); 
     }
   }
+  createPlaylistFunction(parameters, unqfy){
+    if (parameters.length >= 4) {
+      console.log(
 
+        unqfy.createPlaylist(parameters[1],parameters[2],parseInt(parameters[3])));
+    } else {
+      throw new CommandIncompleteError(parameters[0], 3);
+    }
+  }
 }
 
 
