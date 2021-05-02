@@ -9,7 +9,8 @@ class Command {
       addTrack: this.addTrackFunction,
       getArtistById: this.getArtistByIdFunction,
       getAlbumById: this.getAlbumByIdFunction,
-      deleteArtist: this.deleteArtistFunction
+      deleteArtist: this.deleteArtistFunction,
+      searchByName: this.searchByNameFunction
     };
   }
 
@@ -88,6 +89,15 @@ class Command {
     }
   }
 
+  searchByNameFunction(params, unqfy) { 
+    if (params.length === 2) {
+      console.log(
+        unqfy.searchByName(params[1])
+      );
+    } else {
+      throw new CommandIncompleteError(params[0],1); 
+    }
+  }
 
 }
 
