@@ -27,7 +27,7 @@ class Command {
   }
 
   addArtistFunction(parameters, unqfy) {
-    if (parameters.length === 3) {
+    if (parameters.length >= 3) {
       console.log(
         unqfy.addArtist({ name: parameters[1], country: parameters[2] })
       );
@@ -37,7 +37,7 @@ class Command {
   }
 
   addAlbumFunction(parameters, unqfy) {
-    if (parameters.length === 4) {
+    if (parameters.length >= 4) {
       console.log(
         unqfy.addAlbum(parseInt(parameters[1]), {
           name: parameters[2],
