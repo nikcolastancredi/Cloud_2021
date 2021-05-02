@@ -8,7 +8,8 @@ class Command {
       addAlbum: this.addAlbumFunction,
       addTrack: this.addTrackFunction,
       getArtistById: this.getArtistByIdFunction,
-      getAlbumById: this.getAlbumByIdFunction
+      getAlbumById: this.getAlbumByIdFunction,
+      deleteArtist: this.deleteArtistFunction
     };
   }
 
@@ -75,6 +76,21 @@ class Command {
       throw new CommandIncompleteError(parameters[0], 1);
     }
   }
+
+
+
+  deleteArtistFunction(parameters, unqfy) {
+    if (parameters.length >= 2) {
+      console.log(
+        unqfy.deleteArtist(parseInt(parameters[1])));
+    } else {
+      throw new CommandIncompleteError(parameters[0], 1);
+    }
+  }
+
+
 }
+
+
 
 module.exports = Command;

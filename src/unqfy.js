@@ -194,6 +194,41 @@ class UNQfy {
     return { artists, albums, tracks, playlists };
   }
 
+
+  /*****/ 
+  deleteArtist(artistId){
+    let artista = this.getArtistById(artistId);
+    if(this.artistExists(artista)){
+     let index = this._artists.indexOf(artista);
+     if (index > -1) {
+      this._artists.splice(index, 1);
+      console.log("array despues de eliminar", this._artists)
+    }
+      return ("El artista " + artista.name + " ha sido eliminado con éxito")
+    }
+    else{
+      throw new artistDoesNotExistError;
+    }
+  }
+
+  
+
+  deleteAlbum(albumId){
+ return 0
+  }
+  
+  
+  deleteTrack(trackId){
+    return 0
+
+  }
+  deletePlaylist(playlistId){
+    return 0
+
+  }
+
+/******/ 
+
  save(filename) {
     const serializedData = picklify.picklify(this);
     fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));
