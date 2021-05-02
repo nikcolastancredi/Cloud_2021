@@ -20,6 +20,9 @@ module.exports= class Artist{
   get country(){
     return this._country;
   }
+    get albums(){
+    return this._albums;
+  }
 
   addAlbum(album){
     if(this._albums.some(a => a.name===album.name)){
@@ -32,17 +35,18 @@ module.exports= class Artist{
   }
 
   removeAlbum(album){
-    if(this._albums.find(a=>a===album)!==undefined){
-      this._albums.pop(album);
-    }
-    else {
-      throw albumDoesNotExistError;
-    }
-  }
+    if(this._albums.some(a => a.id===album.id)){
+      const index = this.albums.indexOf(album);
+      if (index > -1) {
+       this.albums.splice(index, 1);
+       console.log("array despues de eliminar album",this.albums);
 
-  get albums(){
-    return this._albums;
+    }
+ 
   }
+}
+
+
 
 
 };

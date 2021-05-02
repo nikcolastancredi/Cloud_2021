@@ -197,16 +197,15 @@ class UNQfy {
 
   /*****/ 
   deleteArtist(artistId){
-    let artista = this.getArtistById(artistId);
+    const artista = this.getArtistById(artistId);
     if(this.artistExists(artista)){
-     let index = this._artists.indexOf(artista);
+     const index = this._artists.indexOf(artista);
      if (index > -1) {
       this._artists.splice(index, 1);
-      console.log("array despues de eliminar", this._artists)
+      console.log("array despues de eliminar", this._artists);
     }
-      return ("El artista " + artista.name + " ha sido eliminado con éxito")
-    }
-    else{
+      return (`El artista '${artista.name}' ha sido eliminado con éxito`);
+    } else{
       throw new artistDoesNotExistError;
     }
   }
@@ -214,16 +213,25 @@ class UNQfy {
   
 
   deleteAlbum(albumId){
- return 0
+
+    const artist=this._artists.find(a=>a.albums.includes(this.getAlbumById(albumId)));
+    
+    if(this.artistExists(artist)){
+     artist.removeAlbum(albumId);
+      console.log("array despues de eliminar album->",artist.albums);
+      return (`El álbum ha sido eliminado con éxito`);
+    } else{
+      throw new albumDoesNotExistError;
+    }
   }
   
-  
+
   deleteTrack(trackId){
-    return 0
+    return 0;
 
   }
   deletePlaylist(playlistId){
-    return 0
+    return 0;
 
   }
 
