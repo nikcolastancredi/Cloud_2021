@@ -140,8 +140,10 @@ class UNQfy {
   }
 
   getPlaylistById(id) {
-
+    const playlist = this.playlists.filter(p => p.id === id);
+    return playlist;
   }
+
 
   // genres: array de generos(strings)
   // retorna: los tracks que contenga alguno de los generos en el parametro genres
@@ -257,7 +259,7 @@ class UNQfy {
   static load(filename) {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
     //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy, artist, album, track,playlist];
+    const classes = [UNQfy, artist, album, track, playlist];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 }

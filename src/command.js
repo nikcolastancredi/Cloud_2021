@@ -13,7 +13,10 @@ class Command {
       deleteAlbum: this.deleteAlbumFunction,
       deleteTrack: this.deleteTrackFunction,
       searchByName: this.searchByNameFunction,
-      createPlaylist : this.createPlaylistFunction
+      createPlaylist : this.createPlaylistFunction,
+      getTracksMatchingGenres : this.getTracksMatchingGenresFuncion,
+      getPlaylistById : this.getPlaylistByIdFuncion,
+      getTrackById : this.getTrackByIdFuncion
 
     };
   }
@@ -129,6 +132,33 @@ class Command {
       throw new CommandIncompleteError(parameters[0], 3);
     }
   }
+  getTracksMatchingGenresFuncion(parameters, unqfy){
+    if (parameters.length >= 1) {
+      console.log(
+        unqfy.getTracksMatchingGenres(parameters));
+    } else {
+      throw new CommandIncompleteError(parameters[0], 1);
+    }
+  }
+
+  getTrackByIdFuncion(parameters, unqfy){
+    if (parameters.length >= 1) {
+      console.log(
+        unqfy.getTrackById(parameters));
+    } else {
+      throw new CommandIncompleteError(parameters[0], 1);
+    }
+  }
+
+  getPlaylistByIdFuncion(parameters, unqfy){
+    if (parameters.length >= 1) {
+      console.log(
+        unqfy.getPlaylistById(parameters));
+    } else {
+      throw new CommandIncompleteError(parameters[0], 1);
+    }
+  }
+  
 }
 
 
