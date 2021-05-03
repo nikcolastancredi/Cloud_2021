@@ -1,4 +1,5 @@
 const trackAlreadyExistsError= require('./errores/TrackAlreadyExistsError');
+const trackDoesNotExistsError= require('./errores/TrackDoesNotExistsError');
 
 module.exports= class album{
 
@@ -29,7 +30,21 @@ module.exports= class album{
     if(this._tracks.some( t => t.name === track.name)){
       throw trackAlreadyExistsError;
     }else{
-      this._tracks.push(track);
+      this.tracks.push(track);
     }
   }
+
+  removeTrack(track){
+    if(this.tracks.some( t => t.name === track.name)){
+      const index = this.tracks.indexOf(track);
+        this.tracks.splice(index, 1);
+        console.log("array despues de eliminar track :",this.tracks);
+    }else{
+            throw trackDoesNotExistsError;
+    }
+  }
+
+
+
+
 };

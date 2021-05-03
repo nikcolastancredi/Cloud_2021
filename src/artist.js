@@ -40,13 +40,12 @@ module.exports= class Artist{
       if (index > -1) {
        this.albums.splice(index, 1);
        console.log("array despues de eliminar album",this.albums);
-
     }
- 
+    else {
+      throw new albumDoesNotExistError;
+    }
   }
 }
-
-
 
 
 };

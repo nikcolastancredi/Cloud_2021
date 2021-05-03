@@ -9,6 +9,7 @@ const playlist = require('./playlist');
 const artistExistError= require('./errores/ArtistAlreadyExistsError');
 const artistDoesNotExistError=require('./errores/ArtistDoesNotExistError');
 const albumDoesNotExistError= require('./errores/AlbumDoesNotExistError');
+const TrackDoesNotExistsError = require('./errores/TrackDoesNotExistsError');
 
 
 class UNQfy {
@@ -128,7 +129,9 @@ class UNQfy {
   }
 
   getTrackById(id) {
-
+  const track= this._artists.flatMap(artist => artist.albums)
+          .flatMap(album => album.tracks).find(t => t.id === id);
+          return track;
   }
 
   getAlbums(id, albums) {
@@ -195,7 +198,6 @@ class UNQfy {
   }
 
 
-  /*****/ 
   deleteArtist(artistId){
     const artista = this.getArtistById(artistId);
     if(this.artistExists(artista)){
@@ -216,26 +218,35 @@ class UNQfy {
 
     const artist=this._artists.find(a=>a.albums.includes(this.getAlbumById(albumId)));
     
-    if(this.artistExists(artist)){
-     artist.removeAlbum(albumId);
-      console.log("array despues de eliminar album->",artist.albums);
-      return (`El álbum ha sido eliminado con éxito`);
+    if(artist===undefined){
+      throw new albumDoesNotExistError; // error Cannot read property 'name' of undefined
     } else{
-      throw new albumDoesNotExistError;
+      artist.removeAlbum(this.getAlbumById(albumId));
+      return (`El álbum ha sido eliminado con éxito`);
     }
   }
   
 
   deleteTrack(trackId){
-    return 0;
+    const artist = this._artists.find(a => this.artistHasTrack(a,trackId));
 
+    if(artist===undefined){
+      throw new TrackDoesNotExistsError;
+    } else{
+      const album = artist.albums.find(a => a.tracks.some(t=>t.id===trackId));
+    album.removeTrack(this.getTrackById(trackId));
+    console.log("Track eliminado con éxito!");
+    }
   }
+  artistHasTrack(artist,trackid){
+    return artist.albums.some(a => a.tracks.some(t=>t.id===trackid));
+  }
+
   deletePlaylist(playlistId){
-    return 0;
+
+    return 0
 
   }
-
-/******/ 
 
  save(filename) {
     const serializedData = picklify.picklify(this);

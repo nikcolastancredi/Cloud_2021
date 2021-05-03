@@ -11,6 +11,7 @@ class Command {
       getAlbumById: this.getAlbumByIdFunction,
       deleteArtist: this.deleteArtistFunction,
       deleteAlbum: this.deleteAlbumFunction,
+      deleteTrack: this.deleteTrackFunction,
       searchByName: this.searchByNameFunction,
       createPlaylist : this.createPlaylistFunction
 
@@ -96,6 +97,15 @@ class Command {
     if (parameters.length >= 2) {
       console.log(
         unqfy.deleteAlbum(parseInt(parameters[1])));
+    } else {
+      throw new CommandIncompleteError(parameters[0], 1);
+    }
+  }
+
+  deleteTrackFunction(parameters, unqfy) {
+    if (parameters.length >= 2) {
+      console.log(
+        unqfy.deleteTrack(parseInt(parameters[1])));
     } else {
       throw new CommandIncompleteError(parameters[0], 1);
     }

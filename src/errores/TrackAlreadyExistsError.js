@@ -1,6 +1,6 @@
 module.exports= class TrackAlreadyExistsError extends Error{
     constructor(){
-      super(' This artist doesn\'t exist');
+      super(' This track already exists');
       this.name= 'TrackAlreadyExistsError';
     }
   };
