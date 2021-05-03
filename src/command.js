@@ -125,17 +125,18 @@ class Command {
   }
   createPlaylistFunction(parameters, unqfy){
     if (parameters.length >= 4) {
+      const IndDuration = parameters.length - 1;
+       
       console.log(
-
-        unqfy.createPlaylist(parameters[1],parameters[2],parseInt(parameters[3])));
+        unqfy.createPlaylist(parameters[1],parameters.slice(2,IndDuration),parseInt(parameters[IndDuration])));
     } else {
       throw new CommandIncompleteError(parameters[0], 3);
     }
   }
   getTracksMatchingGenresFuncion(parameters, unqfy){
-    if (parameters.length >= 1) {
+    if (parameters.length >= 1) { 
       console.log(
-        unqfy.getTracksMatchingGenres(parameters));
+        unqfy.getTracksMatchingGenres(parameters.slice(1,parameters.length - 1 )));
     } else {
       throw new CommandIncompleteError(parameters[0], 1);
     }
@@ -144,7 +145,7 @@ class Command {
   getTrackByIdFuncion(parameters, unqfy){
     if (parameters.length >= 1) {
       console.log(
-        unqfy.getTrackById(parameters));
+        unqfy.getTrackById(parseInt(parameters[1])));
     } else {
       throw new CommandIncompleteError(parameters[0], 1);
     }
@@ -153,7 +154,7 @@ class Command {
   getPlaylistByIdFuncion(parameters, unqfy){
     if (parameters.length >= 1) {
       console.log(
-        unqfy.getPlaylistById(parameters));
+        unqfy.getPlaylistById(parseInt(parameters[1])));
     } else {
       throw new CommandIncompleteError(parameters[0], 1);
     }
