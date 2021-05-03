@@ -10,12 +10,15 @@ const artistExistError= require('./errores/ArtistAlreadyExistsError');
 const artistDoesNotExistError=require('./errores/ArtistDoesNotExistError');
 const albumDoesNotExistError= require('./errores/AlbumDoesNotExistError');
 const TrackDoesNotExistsError = require('./errores/TrackDoesNotExistsError');
+const UserAlreadyExistsError = require('./errores/UserAlreadyExistsError');
+const user = require('./user');
 
 
 class UNQfy {
   constructor(){
     this._artists = [];
     this.playlists = [];
+    this.users = [];
     this.uniqueId = 0;
  
   }
@@ -49,6 +52,29 @@ class UNQfy {
   artistExists(artistData){
     return (this._artists.some(
       artist => artist.name === artistData.name)
+      );
+  }
+  
+  addUser(userData) {
+  /* Crea un artista y lo agrega a unqfy. El objeto artista creado debe soportar (al menos):
+    - una propiedad name (string)
+    - una propiedad country (string)*/
+ 
+    if(this.userExists(userData)){
+      throw new UserAlreadyExistsError();
+    }
+
+    else{
+      const newUser= new user(userData.name, this.getUniqueId());
+      this.users.push(newUser);
+      return newUser;
+
+    }
+  }
+
+  userExists(userData){
+    return (this.users.some(
+      user => user.name === userData.name)
       );
   }
 

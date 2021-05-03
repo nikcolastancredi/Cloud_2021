@@ -5,6 +5,7 @@ class Command {
   constructor() {
     this.commandList = {
       addArtist: this.addArtistFunction,
+      addUser: this.addUserFunction,
       addAlbum: this.addAlbumFunction,
       addTrack: this.addTrackFunction,
       getArtistById: this.getArtistByIdFunction,
@@ -64,6 +65,16 @@ class Command {
       );
     } else {
       throw new CommandIncompleteError(parameters[0], 4);
+    }
+  }
+
+  addUserFunction(parameters, unqfy) {
+    if (parameters.length >= 2) {
+      console.log(
+        unqfy.addUser({ name: parameters[1]})
+      );
+    } else {
+      throw new CommandIncompleteError(parameters[0], 2);
     }
   }
 
