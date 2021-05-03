@@ -13,9 +13,10 @@ Responsibilities
 + getTracksMatchingGenres(genres)
 + getTracksMatchingArtist(artistName)
 + createPlaylist(name, genresToInclude, maxDuration)
-+ removeArtist(artist)
-+ removeAlbum(album)
-+ removeTrack(track)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>110</x><y>520</y><w>230</w><h>250</h></coordinates><panel_attributes>&lt;&lt;Playlist&gt;&gt;
++ deleteArtist(artistId)
++ deleteAlbum(albumId)
++ deleteTrack(trackId)
++ deletePlaylist(playlistId)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>110</x><y>520</y><w>230</w><h>250</h></coordinates><panel_attributes>&lt;&lt;Playlist&gt;&gt;
 --
 id: int
 name: String
@@ -70,4 +71,19 @@ m2=0..1
 Tracks &gt;</panel_attributes><additional_attributes>130;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>330</x><y>540</y><w>510</w><h>100</h></coordinates><panel_attributes>lt=-
 m1=0..1
 m2=0..n
-&lt; Traks</panel_attributes><additional_attributes>450;80;450;10;10;10</additional_attributes></element></diagram>
+&lt; Traks</panel_attributes><additional_attributes>450;80;450;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1240</x><y>620</y><w>180</w><h>220</h></coordinates><panel_attributes>&lt;&lt;User&gt;&gt;
+--
+name: String
+id: int
+--
+Responsibilities:
++ listenTrack(trackId)
++ getPlayedTracks()
++ getManyTimesPlayed(trackId)
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>400</x><y>40</y><w>960</w><h>600</h></coordinates><panel_attributes>lt=-
+m1=0..n
+m2=0..1
+User</panel_attributes><additional_attributes>920;580;920;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>790</x><y>810</y><w>590</w><h>190</h></coordinates><panel_attributes>lt=-
+m1=0..n
+m2=0..1
+Tracks &gt;</panel_attributes><additional_attributes>550;30;550;170;10;170;10;10</additional_attributes></element></diagram>
