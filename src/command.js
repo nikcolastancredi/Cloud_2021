@@ -18,7 +18,8 @@ class Command {
       getTracksMatchingGenres : this.getTracksMatchingGenresFuncion,
       getPlaylistById : this.getPlaylistByIdFuncion,
       getTrackById : this.getTrackByIdFuncion,
-      deletePlaylist : this.deletePlaylistFunction
+      deletePlaylist : this.deletePlaylistFunction,
+      playTrack : this.playTrackFunction
 
     };
   }
@@ -180,6 +181,16 @@ class Command {
       throw new CommandIncompleteError(parameters[0], 1);
     }
   }
+
+    playTrackFunction(parameters, unqfy){
+    if (parameters.length >= 2) {
+      console.log(
+        unqfy.playTrack(parseInt(parameters[1]), parseInt(parameters[2])));
+    } else {
+      throw new CommandIncompleteError(parameters[0], 1);
+    }
+  }
+
   
 }
 

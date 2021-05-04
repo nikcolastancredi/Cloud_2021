@@ -11,6 +11,7 @@ const artistDoesNotExistError=require('./errores/ArtistDoesNotExistError');
 const albumDoesNotExistError= require('./errores/AlbumDoesNotExistError');
 const TrackDoesNotExistsError = require('./errores/TrackDoesNotExistsError');
 const UserAlreadyExistsError = require('./errores/UserAlreadyExistsError');
+const userDoesNotExistError = require('./errores/UserDoesNotExistsError');
 const playlistDoesNotExistError = require('./errores/PlaylistDoesNotExistsError');
 const user = require('./user');
 
@@ -297,6 +298,32 @@ class UNQfy {
 
   }
 
+
+
+  playTrack(userId, trackId){
+    const user = this.getUserById(userId);
+    const track = this.getTrackById(trackId);
+    if(user === undefined){
+      throw new userDoesNotExistError;
+    } else {
+      this.userPlayTrack(user,track);
+    }
+  }
+
+  getUserById(userId){
+    return this.users.find(u => u.id === userId);
+  }
+
+  userPlayTrack(user,track){
+    if (track===undefined) {
+      throw new TrackDoesNotExistsError;
+     } else {
+       user.playTrack(track);
+     }
+  }
+
+
+
   save(filename) {
     const serializedData = picklify.picklify(this);
     fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));
@@ -306,7 +333,7 @@ class UNQfy {
   static load(filename) {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
     //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy, artist, album, track, playlist];
+    const classes = [UNQfy, artist, album, track, playlist, user];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 }
