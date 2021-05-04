@@ -86,6 +86,13 @@ class Playlist {
     removeTrackIfInList(tracks) {
       return tracks.filter(t => !this.hasTrack(t));
     }
+
+    removeTrack(trackId){
+      const index = this.tracks.findIndex(t=>t.id===trackId);
+      if (index > -1) {
+        this.tracks.splice(index, 1);
+    }
   }
   
+}
   module.exports = Playlist;

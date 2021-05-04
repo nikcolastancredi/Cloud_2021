@@ -258,25 +258,33 @@ class UNQfy {
 
   deleteTrack(trackId){
     const artist = this._artists.find(a => this.artistHasTrack(a,trackId));
-    //const playlist = this.playlists.flatMap()
+    const playlist = this.playlists.find(p=>this.playlistHasTrack(p,trackId));
 
     if(artist===undefined){
       throw new TrackDoesNotExistsError;
     } else{
       const album = artist.albums.find(a => a.tracks.some(t=>t.id===trackId));
-    album.removeTrack(this.getTrackById(trackId));
+      album.removeTrack(this.getTrackById(trackId));
+    
+      if(playlist!==undefined){
+      playlist.removeTrack(trackId); 
+      }
+    }    
     console.log("Track eliminado con éxito!");
     }
-  }
-
+      
   artistHasTrack(artist,trackid){
     return artist.albums.some(a => a.tracks.some(t=>t.id===trackid));
+  }
+
+  playlistHasTrack(playlist,trackid){
+    return playlist.getTracks().some(t=>t.id===trackid);
   }
 
   deletePlaylist(playlistId){
     const playlist = this.playlists.find(p=>p.id===playlistId);
     
-    if(playlist===undefined){
+    if(playlist === undefined){
       throw new playlistDoesNotExistError; 
     } else{
       const index = this.playlists.indexOf(playlist);
