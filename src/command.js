@@ -17,7 +17,8 @@ class Command {
       createPlaylist : this.createPlaylistFunction,
       getTracksMatchingGenres : this.getTracksMatchingGenresFuncion,
       getPlaylistById : this.getPlaylistByIdFuncion,
-      getTrackById : this.getTrackByIdFuncion
+      getTrackById : this.getTrackByIdFuncion,
+      deletePlaylist : this.deletePlaylistFunction
 
     };
   }
@@ -120,6 +121,15 @@ class Command {
     if (parameters.length >= 2) {
       console.log(
         unqfy.deleteTrack(parseInt(parameters[1])));
+    } else {
+      throw new CommandIncompleteError(parameters[0], 1);
+    }
+  }
+
+  deletePlaylistFunction(parameters, unqfy) {
+    if (parameters.length >= 2) {
+      console.log(
+        unqfy.deletePlaylist(parseInt(parameters[1])));
     } else {
       throw new CommandIncompleteError(parameters[0], 1);
     }

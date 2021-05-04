@@ -11,6 +11,7 @@ const artistDoesNotExistError=require('./errores/ArtistDoesNotExistError');
 const albumDoesNotExistError= require('./errores/AlbumDoesNotExistError');
 const TrackDoesNotExistsError = require('./errores/TrackDoesNotExistsError');
 const UserAlreadyExistsError = require('./errores/UserAlreadyExistsError');
+const playlistDoesNotExistError = require('./errores/PlaylistDoesNotExistsError');
 const user = require('./user');
 
 
@@ -247,7 +248,7 @@ class UNQfy {
     const artist=this._artists.find(a=>a.albums.includes(this.getAlbumById(albumId)));
     
     if(artist===undefined){
-      throw new albumDoesNotExistError; // error Cannot read property 'name' of undefined
+      throw new albumDoesNotExistError;
     } else{
       artist.removeAlbum(this.getAlbumById(albumId));
       return (`El álbum ha sido eliminado con éxito`);
@@ -257,6 +258,7 @@ class UNQfy {
 
   deleteTrack(trackId){
     const artist = this._artists.find(a => this.artistHasTrack(a,trackId));
+    //const playlist = this.playlists.flatMap()
 
     if(artist===undefined){
       throw new TrackDoesNotExistsError;
@@ -266,17 +268,28 @@ class UNQfy {
     console.log("Track eliminado con éxito!");
     }
   }
+
   artistHasTrack(artist,trackid){
     return artist.albums.some(a => a.tracks.some(t=>t.id===trackid));
   }
 
   deletePlaylist(playlistId){
-
-    return 0
+    const playlist = this.playlists.find(p=>p.id===playlistId);
+    
+    if(playlist===undefined){
+      throw new playlistDoesNotExistError; 
+    } else{
+      const index = this.playlists.indexOf(playlist);
+      if (index > -1) {
+       this.playlists.splice(index, 1);
+       console.log("playlist[] despues de eliminar :", this.playlists);
+     }
+       return (`La playlist '${playlist.getName()}' ha sido eliminado con éxito`);
+    }
 
   }
 
- save(filename) {
+  save(filename) {
     const serializedData = picklify.picklify(this);
     fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));
   }
