@@ -19,7 +19,8 @@ class Command {
       getPlaylistById : this.getPlaylistByIdFuncion,
       getTrackById : this.getTrackByIdFuncion,
       deletePlaylist : this.deletePlaylistFunction,
-      playTrack : this.playTrackFunction
+      playTrack : this.playTrackFunction,
+      getTracksMatchingArtist : this.getTracksMatchingArtistFuncion
 
     };
   }
@@ -163,6 +164,17 @@ class Command {
       throw new CommandIncompleteError(parameters[0], 1);
     }
   }
+
+  getTracksMatchingArtistFuncion(parameters, unqfy){
+    if (parameters.length >= 1) { 
+      console.log(
+        unqfy.getTracksMatchingArtist(parameters[1]));
+    } else {
+      throw new CommandIncompleteError(parameters[0], 1);
+    }
+  }
+
+
 
   getTrackByIdFuncion(parameters, unqfy){
     if (parameters.length >= 1) {

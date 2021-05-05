@@ -1,5 +1,5 @@
-const albumAlreadyExistsError= require('./errores/AlbumAlreadyExistsError');
-const albumDoesNotExistError= require('./errores/AlbumDoesNotExistError');
+const AlbumAlreadyExistsError= require('./errores/AlbumAlreadyExistsError');
+const AlbumDoesNotExistError= require('./errores/AlbumDoesNotExistError');
 
 
 module.exports= class Artist{
@@ -20,13 +20,14 @@ module.exports= class Artist{
   get country(){
     return this._country;
   }
-    get albums(){
+  
+  get albums(){
     return this._albums;
   }
 
   addAlbum(album){
     if(this._albums.some(a => a.name===album.name)){
-      throw albumAlreadyExistsError; 
+      throw AlbumAlreadyExistsError; 
     }
     else{
        this._albums.push(album);
@@ -42,7 +43,7 @@ module.exports= class Artist{
        console.log("array despues de eliminar album",this.albums);
     }
     else {
-      throw new albumDoesNotExistError;
+      throw new AlbumDoesNotExistError;
     }
   }
 }
