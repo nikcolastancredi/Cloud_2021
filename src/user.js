@@ -1,5 +1,5 @@
 
-module.exports= class user{
+module.exports= class User{
 
   constructor(name, id){
     this._id= id;

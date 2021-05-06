@@ -2,19 +2,18 @@
 const picklify = require('picklify'); // para cargar/guardar unqfy
 const fs = require('fs'); // para cargar/guarfar unqfy
 
-const artist = require('./artist');
-const album = require('./album');
-const track = require('./track');
-const playlist = require('./playlist');
-const artistExistError= require('./errores/ArtistAlreadyExistsError');
-const artistDoesNotExistError=require('./errores/ArtistDoesNotExistError');
-const albumDoesNotExistError= require('./errores/AlbumDoesNotExistError');
+const Artist = require('./Artist');
+const Album = require('./Album');
+const Track = require('./Track');
+const Playlist = require('./Playlist');
+const ArtistExistError= require('./errores/ArtistAlreadyExistsError');
+const ArtistDoesNotExistError=require('./errores/ArtistDoesNotExistError');
+const AlbumDoesNotExistError= require('./errores/AlbumDoesNotExistError');
 const TrackDoesNotExistsError = require('./errores/TrackDoesNotExistsError');
 const UserAlreadyExistsError = require('./errores/UserAlreadyExistsError');
-const userDoesNotExistError = require('./errores/UserDoesNotExistsError');
-const playlistDoesNotExistError = require('./errores/PlaylistDoesNotExistsError');
-const user = require('./user');
-const { AssertionError } = require('chai');
+const UserDoesNotExistError = require('./errores/UserDoesNotExistsError');
+const PlaylistDoesNotExistError = require('./errores/PlaylistDoesNotExistsError');
+const User = require('./User');
 
 
 class UNQfy {
@@ -41,11 +40,11 @@ class UNQfy {
     - una propiedad country (string)*/
  
     if(this.artistExists(artistData)){
-      throw new artistExistError;
+      throw new ArtistExistError;
     }
 
     else{
-      const newArtist= new artist(artistData.name,artistData.country, this.getUniqueId());
+      const newArtist= new Artist(artistData.name,artistData.country, this.getUniqueId());
       this._artists.push(newArtist);
       return newArtist;
 
@@ -68,7 +67,7 @@ class UNQfy {
     }
 
     else{
-      const newUser= new user(userData.name, this.getUniqueId());
+      const newUser= new User(userData.name, this.getUniqueId());
       this.users.push(newUser);
       return newUser;
 
@@ -90,10 +89,10 @@ class UNQfy {
   /* Crea un album y lo agrega al artista con id artistId. El objeto album creado debe tener (al menos):
      - una propiedad name (string)
      - una propiedad year (number) */
-    const newAlbum = new album (albumData.name, albumData.year, this.getUniqueId());
+    const newAlbum = new Album (albumData.name, albumData.year, this.getUniqueId());
     const artist = this.getArtistById(artistId);
     if(artist===undefined){
-      throw new artistDoesNotExistError();
+      throw new ArtistDoesNotExistError();
     }
     else {
       artist.addAlbum(newAlbum);
@@ -115,11 +114,11 @@ class UNQfy {
       - una propiedad duration (number),
       - una propiedad genres (lista de strings)
   */
-    const newTrack= new track(trackData.name, trackData.duration, trackData.genres,this.getUniqueId());
+    const newTrack= new Track(trackData.name, trackData.duration, trackData.genres,this.getUniqueId());
     const album =  this.getAlbumById(albumId);
 
     if(album === undefined){
-      throw new albumDoesNotExistError();
+      throw new AlbumDoesNotExistError();
     }
     else{
       album.addTrack(newTrack);
@@ -132,7 +131,7 @@ class UNQfy {
     const artist = this._artists.find(a => a.id === id);
 
     if(artist === undefined){
-      throw new artistDoesNotExistError;
+      throw new ArtistDoesNotExistError;
     }
     else{
       return artist;
@@ -158,9 +157,16 @@ class UNQfy {
   }
 
   getTrackById(id) {
-  const track= this._artists.flatMap(artist => artist.albums)
-          .flatMap(album => album.tracks).find(t => t.id === id);
-          return track;
+    const track = this._artists
+      .flatMap((artist) => artist.albums)
+      .flatMap((album) => album.tracks)
+      .find((t) => t.id === id);
+
+    if (track === undefined) {
+      throw new TrackDoesNotExistsError();
+    } else {
+      return track;
+    }
   }
 
   getAlbums(id, albums) {
@@ -170,7 +176,11 @@ class UNQfy {
 
   getPlaylistById(id) {
     const playlist = this.playlists.filter(p => p.id === id);
-    return playlist;
+    if (playlist.length === 0) {
+      throw new PlaylistDoesNotExistError();
+    } else {
+      return playlist[0];
+    }
   }
 
 
@@ -186,7 +196,16 @@ class UNQfy {
   // artistName: nombre de artista(string)
   // retorna: los tracks interpredatos por el artista con nombre artistName
   getTracksMatchingArtist(artistName) {
-    return this._artists.filter(artist => artist.name === artistName).flatMap(artist => artist.albums.flatMap(album => album.tracks));
+    const artistNameValue = artistName.toLowerCase();
+    const artist = this._artists.filter(artist => artist.name.toLowerCase() === artistNameValue)[0];
+
+    if(artist === null || artist === undefined){
+
+      return [];
+    } else{
+
+      return artist.getTracks();
+    }
   }
 
 
@@ -201,18 +220,13 @@ class UNQfy {
       * un metodo duration() que retorne la duración de la playlist.
       * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist.
   */
-    try {
       const idPlaylist = this.getUniqueId();
-      const newPlaylist = new playlist(idPlaylist, name, genresToInclude);
+      const newPlaylist = new Playlist(idPlaylist, name, genresToInclude);
       ///console.log(newPlaylist);
       const tracksInGenres = this.getTracksMatchingGenres(genresToInclude);
       newPlaylist.generateListByTracks(tracksInGenres, maxDuration);
       this.addPlaylist(newPlaylist);
       return newPlaylist;
-    } 
-    catch (error) {
-      throw error;
-    }
   }
 
   addPlaylist(newPlaylist) {
@@ -221,10 +235,11 @@ class UNQfy {
   
 
   searchByName(name) {
-    const artists = this._artists.filter(artist => artist.name.includes(name));
-    const albums = this._artists.flatMap(artist => artist.albums.filter(album => album.name.includes(name)));
-    const tracks = this._artists.flatMap(artist => artist.albums.flatMap(album => album.tracks.filter(track => track.name.includes(name))));
-    const playlists = this.playlists.filter(playlist => playlist.name.includes(name));
+    const nameValue = name.toLowerCase();
+    const artists = this._artists.filter(artist => artist.name.toLowerCase().includes(nameValue));
+    const albums = this._artists.flatMap(artist => artist.albums.filter(album => album.name.toLowerCase().includes(nameValue)));
+    const tracks = this._artists.flatMap(artist => artist.albums.flatMap(album => album.tracks.filter(track => track.name.toLowerCase().includes(nameValue))));
+    const playlists = this.playlists.filter(playlist => playlist.name.toLowerCase().includes(nameValue));
     return { artists, albums, tracks, playlists };
   }
 
@@ -241,7 +256,7 @@ class UNQfy {
     }
       return (`El artista '${artista.name}' ha sido eliminado con éxito`);
     } else{
-      throw new artistDoesNotExistError;
+      throw new ArtistDoesNotExistError;
     }
   }
 
@@ -255,7 +270,7 @@ class UNQfy {
     const album = this.getAlbumById(albumId);
     
     if(artist===undefined){
-      throw new albumDoesNotExistError;
+      throw new AlbumDoesNotExistError;
     } else{
       this.deleteTracksFromPlaylists(album.tracks);//
       artist.removeAlbum(this.getAlbumById(albumId));
@@ -284,7 +299,7 @@ class UNQfy {
     const playlist = this.playlists.find(p=>p.id===playlistId);
     
     if(playlist === undefined){
-      throw new playlistDoesNotExistError; 
+      throw new PlaylistDoesNotExistError; 
     } else{
       const index = this.playlists.indexOf(playlist);
       if (index > -1) {
@@ -302,7 +317,7 @@ class UNQfy {
     const user = this.getUserById(userId);
     const track = this.getTrackById(trackId);
     if(user === undefined){
-      throw new userDoesNotExistError;
+      throw new UserDoesNotExistError;
     } else {
       this.userPlayTrack(user,track);
     }
@@ -331,7 +346,7 @@ class UNQfy {
   static load(filename) {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
     //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy, artist, album, track, playlist, user];
+    const classes = [UNQfy, Artist, Track, Playlist, User, Album];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 }

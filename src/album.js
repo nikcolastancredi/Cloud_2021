@@ -1,7 +1,7 @@
-const trackAlreadyExistsError= require('./errores/TrackAlreadyExistsError');
-const trackDoesNotExistsError= require('./errores/TrackDoesNotExistsError');
+const TrackAlreadyExistsError= require('./errores/TrackAlreadyExistsError');
+const TrackDoesNotExistsError= require('./errores/TrackDoesNotExistsError');
 
-module.exports= class album{
+module.exports= class Album{
 
   constructor(name, year,id){
     this._id= id;
@@ -28,7 +28,7 @@ module.exports= class album{
 
   addTrack(track){
     if(this._tracks.some( t => t.name === track.name)){
-      throw trackAlreadyExistsError;
+      throw TrackAlreadyExistsError;
     }else{
       this.tracks.push(track);
     }
@@ -39,7 +39,7 @@ module.exports= class album{
       const index = this.tracks.indexOf(track);
        return this.tracks.splice(index, 1);
     }else{
-            throw trackDoesNotExistsError;
+            throw TrackDoesNotExistsError;
     }
   }
 
