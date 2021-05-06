@@ -197,7 +197,15 @@ class UNQfy {
   // retorna: los tracks interpredatos por el artista con nombre artistName
   getTracksMatchingArtist(artistName) {
     const artistNameValue = artistName.toLowerCase();
-    return this._artists.filter(artist => artist.name.toLowerCase() === artistNameValue).flatMap(artist => artist.albums.flatMap(album => album.tracks));
+    const artist = this._artists.filter(artist => artist.name.toLowerCase() === artistNameValue)[0];
+
+    if(artist === null || artist === undefined){
+
+      return [];
+    } else{
+
+      return artist.getTracks();
+    }
   }
 
 

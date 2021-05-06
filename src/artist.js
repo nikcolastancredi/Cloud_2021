@@ -48,5 +48,12 @@ module.exports= class Artist{
   }
 }
 
+  getTracks(){
+  
+    return this._albums.flatMap(album => album.tracks);
+
+  }
+
+
 
 };
