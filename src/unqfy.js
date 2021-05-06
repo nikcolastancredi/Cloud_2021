@@ -157,9 +157,16 @@ class UNQfy {
   }
 
   getTrackById(id) {
-  const track= this._artists.flatMap(artist => artist.albums)
-          .flatMap(album => album.tracks).find(t => t.id === id);
-          return track;
+    const track = this._artists
+      .flatMap((artist) => artist.albums)
+      .flatMap((album) => album.tracks)
+      .find((t) => t.id === id);
+
+    if (track === undefined) {
+      throw new TrackDoesNotExistsError();
+    } else {
+      return track;
+    }
   }
 
   getAlbums(id, albums) {
@@ -169,7 +176,11 @@ class UNQfy {
 
   getPlaylistById(id) {
     const playlist = this.playlists.filter(p => p.id === id);
-    return playlist;
+    if (playlist.length === 0) {
+      throw new PlaylistDoesNotExistError();
+    } else {
+      return playlist[0];
+    }
   }
 
 
