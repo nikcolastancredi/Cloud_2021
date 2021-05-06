@@ -14,6 +14,7 @@ const UserAlreadyExistsError = require('./errores/UserAlreadyExistsError');
 const userDoesNotExistError = require('./errores/UserDoesNotExistsError');
 const playlistDoesNotExistError = require('./errores/PlaylistDoesNotExistsError');
 const user = require('./user');
+const { AssertionError } = require('chai');
 
 
 class UNQfy {
@@ -228,13 +229,15 @@ class UNQfy {
   }
 
 
-  deleteArtist(artistId){
+  deleteArtist(artistId){//si el artista existe elimina primero los tracks si existen de todas las playlists, y elimina al artista.
     const artista = this.getArtistById(artistId);
+    
     if(this.artistExists(artista)){
+     this.deleteTracksFromPlaylists(artista.getTracks());
+     
      const index = this._artists.indexOf(artista);
      if (index > -1) {
       this._artists.splice(index, 1);
-      console.log("array despues de eliminar", this._artists);
     }
       return (`El artista '${artista.name}' ha sido eliminado con éxito`);
     } else{
@@ -242,15 +245,19 @@ class UNQfy {
     }
   }
 
-  
+  deleteTracksFromPlaylists(tracks){//
+    this.playlists.forEach(p=> p.removeTracks(tracks));
+  }
 
   deleteAlbum(albumId){
 
-    const artist=this._artists.find(a=>a.albums.includes(this.getAlbumById(albumId)));
+    const artist= this._artists.find(a=>a.albums.includes(this.getAlbumById(albumId)));
+    const album = this.getAlbumById(albumId);
     
     if(artist===undefined){
       throw new albumDoesNotExistError;
     } else{
+      this.deleteTracksFromPlaylists(album.tracks);//
       artist.removeAlbum(this.getAlbumById(albumId));
       return (`El álbum ha sido eliminado con éxito`);
     }
@@ -258,28 +265,19 @@ class UNQfy {
   
 
   deleteTrack(trackId){
-    const artist = this._artists.find(a => this.artistHasTrack(a,trackId));
-    const playlist = this.playlists.find(p=>this.playlistHasTrack(p,trackId));
+    const artist = this._artists.find(a => a.hasTrack(trackId));
+    const playlist = this.playlists.find(p=>this.hasTrack(p,trackId));
+    let eliminado = {};
 
     if(artist===undefined){
       throw new TrackDoesNotExistsError;
     } else{
-      const album = artist.albums.find(a => a.tracks.some(t=>t.id===trackId));
-      album.removeTrack(this.getTrackById(trackId));
-    
+      eliminado = artist.removeTrackFromAlbum(this.getTrackById(trackId))[0];//
       if(playlist!==undefined){
-      playlist.removeTrack(trackId); 
-      }
+       playlist.removeTrack(trackId); 
+        }
+      console.log(`Track '${eliminado.name}' id:${eliminado.id} eliminado con éxito!`);
     }    
-    console.log("Track eliminado con éxito!");
-    }
-      
-  artistHasTrack(artist,trackid){
-    return artist.albums.some(a => a.tracks.some(t=>t.id===trackid));
-  }
-
-  playlistHasTrack(playlist,trackid){
-    return playlist.getTracks().some(t=>t.id===trackid);
   }
 
   deletePlaylist(playlistId){
@@ -300,7 +298,7 @@ class UNQfy {
 
 
 
-  playTrack(userId, trackId){
+  playTrack(userId, trackId){//
     const user = this.getUserById(userId);
     const track = this.getTrackById(trackId);
     if(user === undefined){

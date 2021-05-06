@@ -39,13 +39,29 @@ module.exports= class Artist{
       const index = this.albums.indexOf(album);
       if (index > -1) {
        this.albums.splice(index, 1);
-       console.log("array despues de eliminar album",this.albums);
+      
     }
     else {
       throw new albumDoesNotExistError;
     }
   }
 }
+      
+hasTrack(trackid){//
+  return this.albums.some(a => a.tracks.some(t=>t.id===trackid));
+}
 
+
+removeTrackFromAlbum(track){//
+  return this.getAlbumByTrack(track.id).removeTrack(track);
+}
+
+getAlbumByTrack(trackId){ //
+  return this.albums.find(a => a.tracks.some(t=>t.id===trackId));
+}
+
+getTracks(){
+  return this.albums.flatMap(a =>a.tracks);
+}
 
 };

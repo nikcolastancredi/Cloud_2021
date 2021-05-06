@@ -90,9 +90,24 @@ class Playlist {
     removeTrack(trackId){
       const index = this.tracks.findIndex(t=>t.id===trackId);
       if (index > -1) {
-        this.tracks.splice(index, 1);
+        return this.tracks.splice(index, 1);
     }
   }
+    
+    removeTracks(trackArray){//recibe una lista de tracks a eliminar si existen en la playlist
+      trackArray.forEach(t => {
+        if(this.hasTrack(t)){
+          this.removeTrack(t.id);
+          console.log(`track eliminado de playlist : ${t.name}`);
+        }
+      });
+  }
   
+
+
+
+
+
+
 }
   module.exports = Playlist;

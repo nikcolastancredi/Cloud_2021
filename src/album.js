@@ -37,8 +37,7 @@ module.exports= class album{
   removeTrack(track){
     if(this.tracks.some( t => t.name === track.name)){
       const index = this.tracks.indexOf(track);
-        this.tracks.splice(index, 1);
-        console.log("array despues de eliminar track :",this.tracks);
+       return this.tracks.splice(index, 1);
     }else{
             throw trackDoesNotExistsError;
     }
