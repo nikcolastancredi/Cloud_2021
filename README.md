@@ -50,6 +50,7 @@ getArtistById 'artistId'
 getAlbumById 'albumId'
 getTrackById 'trackId'
 getPlaylistById 'playlistId'
+playTrack 'userId' 'trackId'
 
 ```
 
