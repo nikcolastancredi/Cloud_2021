@@ -28,7 +28,7 @@ module.exports= class Album{
 
   addTrack(track){
     if(this._tracks.some( t => t.name === track.name)){
-      throw TrackAlreadyExistsError;
+      throw new TrackAlreadyExistsError();
     }else{
       this.tracks.push(track);
     }
@@ -39,7 +39,7 @@ module.exports= class Album{
       const index = this.tracks.indexOf(track);
        return this.tracks.splice(index, 1);
     }else{
-            throw TrackDoesNotExistsError;
+            throw new TrackDoesNotExistsError();
     }
   }
 

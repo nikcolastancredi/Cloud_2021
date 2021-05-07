@@ -27,7 +27,7 @@ module.exports= class Artist{
 
   addAlbum(album){
     if(this._albums.some(a => a.name===album.name)){
-      throw AlbumAlreadyExistsError; 
+      throw new AlbumAlreadyExistsError(); 
     }
     else{
        this._albums.push(album);
@@ -43,7 +43,7 @@ module.exports= class Artist{
       
     }
     else {
-      throw new AlbumDoesNotExistError;
+      throw new AlbumDoesNotExistError();
     }
   }
 }
