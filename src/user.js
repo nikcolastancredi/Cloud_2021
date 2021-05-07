@@ -25,19 +25,19 @@ module.exports= class User{
   }
 
   playTrack(track){
-    if(this.trackAlreadyPlayed(track.name)){
+    if(this.trackAlreadyPlayed(track.id)){
     this.timesPlayed[track.id]++; //timesPlayed[id] devuelve el valor
     console.log(`track ${track.name} escuchado ${this.timesPlayed[track.id]} veces`);
   } else{
-    this.timesPlayed[track.id]=1; // creo un obj k v
-    this.playedTracks.push(track.name);   
-    console.log(`track ${track.name} agregado a "escuchados" `);
-    console.log(`track ${track.name} escuchado ${this.timesPlayed[track.id]} veces`);
+    this.timesPlayed[track.id]=1; // creo propiedad en obj 
+    this.playedTracks.push(track);   
+    console.log(`track '${track.name}' agregado a "escuchados" `);
+    console.log(`track '${track.name}' escuchado ${this.timesPlayed[track.id]} veces`);
   }
   }
 
-  trackAlreadyPlayed(trackName){
-    return this.playedTracks.some(t=>t===trackName);
+  trackAlreadyPlayed(trackId){
+    return this.playedTracks.some(t=>t.id===trackId);
   }
 
 
