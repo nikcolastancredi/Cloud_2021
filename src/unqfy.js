@@ -335,6 +335,25 @@ class UNQfy {
      }
   }
 
+  userGetPlayedTracks(userId){
+    
+    const user = this.getUserById(userId);
+    if(user === undefined){
+      throw new UserDoesNotExistError;
+    } else {
+    return user.getPlayedTracks();
+    }
+  }
+
+  userGetTimesPlayed(userId, trackId){
+    const user = this.getUserById(userId);
+    if(user === undefined){
+      throw new UserDoesNotExistError;
+    } else {
+    return user.getTimesPlayed(trackId);
+    }
+  }
+
 
 
   save(filename) {

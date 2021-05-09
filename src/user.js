@@ -40,6 +40,18 @@ module.exports= class User{
     return this.playedTracks.some(t=>t.id===trackId);
   }
 
+  getPlayedTracks(){
+    return this.playedTracks.map(t=>t.name);
+  }
+
+  getTimesPlayed(trackId){
+    if(this.trackAlreadyPlayed(trackId)){
+    return this.timesPlayed[trackId];
+    }
+    else{
+      return 0;
+    }
+  }
 
 
 

@@ -20,8 +20,9 @@ class Command {
       getTrackById : this.getTrackByIdFuncion,
       deletePlaylist : this.deletePlaylistFunction,
       playTrack : this.playTrackFunction,
-      getTracksMatchingArtist : this.getTracksMatchingArtistFuncion
-
+      getTracksMatchingArtist : this.getTracksMatchingArtistFuncion,
+      getPlayedTracks : this.getPlayedTracksFunction,
+      getTimesPlayed : this.getTimesPlayedFunction
     };
   }
 
@@ -203,6 +204,22 @@ class Command {
     }
   }
 
+    getPlayedTracksFunction(parameters, unqfy){
+      if (parameters.length >= 2) {
+        console.log(
+          unqfy.userGetPlayedTracks(parseInt(parameters[1])));
+      } else {
+        throw new CommandIncompleteError(parameters[0], 1);
+      }
+  }
+  getTimesPlayedFunction(parameters, unqfy){
+    if (parameters.length >= 2) {
+      console.log(
+        unqfy.userGetTimesPlayed(parseInt(parameters[1]), parseInt(parameters[2]) ));
+    } else {
+      throw new CommandIncompleteError(parameters[0], 1);
+    }
+}
   
 }
 
