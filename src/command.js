@@ -10,6 +10,7 @@ class Command {
       addTrack: this.addTrackFunction,
       getArtistById: this.getArtistByIdFunction,
       getAlbumById: this.getAlbumByIdFunction,
+      getUserById: this.getUserByIdFunction,
       deleteArtist: this.deleteArtistFunction,
       deleteAlbum: this.deleteAlbumFunction,
       deleteTrack: this.deleteTrackFunction,
@@ -22,7 +23,9 @@ class Command {
       playTrack : this.playTrackFunction,
       getTracksMatchingArtist : this.getTracksMatchingArtistFuncion,
       getPlayedTracks : this.getPlayedTracksFunction,
-      getTimesPlayed : this.getTimesPlayedFunction
+      getTimesPlayed : this.getTimesPlayedFunction,
+      getThisIs : this.getThisIsFunction
+
     };
   }
 
@@ -185,6 +188,15 @@ class Command {
       throw new CommandIncompleteError(parameters[0], 1);
     }
   }
+  
+  getUserByIdFunction(parameters, unqfy){
+    if (parameters.length >= 1) {
+      console.log(
+        unqfy.getUserById(parseInt(parameters[1])));
+    } else {
+      throw new CommandIncompleteError(parameters[0], 1);
+    }
+  }
 
   getPlaylistByIdFuncion(parameters, unqfy){
     if (parameters.length >= 1) {
@@ -197,12 +209,18 @@ class Command {
 
     playTrackFunction(parameters, unqfy){
     if (parameters.length >= 2) {
-      console.log(
-        unqfy.playTrack(parseInt(parameters[1]), parseInt(parameters[2])));
+              unqfy.playTrack(parseInt(parameters[1]), parseInt(parameters[2]));
     } else {
       throw new CommandIncompleteError(parameters[0], 1);
     }
   }
+    getThisIsFunction(parameters, unqfy){
+      if (parameters.length >= 2) {
+        console.log(unqfy.getThisIs(parseInt(parameters[1]), parseInt(parameters[2])));
+      } else {
+        throw new CommandIncompleteError(parameters[0], 1);
+      }
+    }
 
     getPlayedTracksFunction(parameters, unqfy){
       if (parameters.length >= 2) {

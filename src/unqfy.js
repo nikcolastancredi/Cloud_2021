@@ -323,9 +323,15 @@ class UNQfy {
     }
   }
 
-  getUserById(userId){
-    return this.users.find(u => u.id === userId);
+  getUserById(id) {
+    const user = this.users.filter(u => u.id === id);
+    if (user.length === 0) {
+      throw new UserDoesNotExistError();
+    } else {
+      return user[0];
+    }
   }
+
 
   userPlayTrack(user,track){
     if (track===undefined) {
@@ -354,6 +360,62 @@ class UNQfy {
     }
   }
 
+  getThisIs(artistId){
+
+    // consigo el artista
+    const artist = this.getArtistById(artistId);
+
+    // consigo los temas del artista
+    const tracksMatchingArtist = this.getTracksMatchingArtist(artist.name);
+
+    // obtengo todos los temas escuchados de todos los usuarios
+    const listenedTracks = this.users.flatMap(u => u.timesPlayed);
+
+    //hago la union de temas escuchados con los que coinciden con el artista
+    const listenedTracksByArtist = this.union(listenedTracks, tracksMatchingArtist);
+
+    // reduzco para poder sumar por trackId
+    const listTrackWithTimesPlayed = this.getSumListenedTracks(listenedTracksByArtist);
+
+    //ordeno los tracks de mayor a menor.
+    const orderedTracksById= listTrackWithTimesPlayed.sort((t1, t2) => t2.timesPlayed - t1.timesPlayed).slice(0, 3);
+
+    const result = [];
+
+    orderedTracksById.forEach(t => {
+
+      const track = this.getTrackById(t.trackId);
+      const trackToAdd = new Track(track.name, track.duration, track.genres, track.id);
+      trackToAdd.timesPlayed = t.timesPlayed;
+      result.push(trackToAdd);
+
+    });
+
+    return result;
+  }
+
+  union(list1, list2) {
+   return list1.filter( a => true === list2.some( b => a.trackId === b.id ) );
+  }
+
+  getSumListenedTracks(array){
+
+    const result= [];
+    array.reduce((res, value) => {
+      if (!res[value.trackId]) {
+        res[value.trackId] = { trackId: value.trackId, timesPlayed: 0 };
+        result.push(res[value.trackId]);
+      }
+      res[value.trackId].timesPlayed += value.timesPlayed;
+      return res;
+    }, {});
+    
+    return result;
+  }
+
+  sortBy(arr, prop) {
+    return arr.sort((a, b) => a[prop] - b[prop]);
+  }
 
 
   save(filename) {
