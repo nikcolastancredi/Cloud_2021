@@ -5,7 +5,7 @@ module.exports= class User{
     this._id= id;
     this._name=name;
     this._playedTracks = [];
-    this._timesPlayed = {};
+    this._timesPlayed = [];
 
   }
 
@@ -26,13 +26,20 @@ module.exports= class User{
 
   playTrack(track){
     if(this.trackAlreadyPlayed(track.id)){
-    this.timesPlayed[track.id]++; //timesPlayed[id] devuelve el valor
-    console.log(`track ${track.name} escuchado ${this.timesPlayed[track.id]} veces`);
+
+      const priorValue = this.timesPlayed.find(t => t.trackId === track.id).timesPlayed;
+
+      const trackIndex = this.timesPlayed.findIndex(t => t.trackId === track.id);
+      this.timesPlayed[trackIndex].timesPlayed = priorValue + 1;
+
   } else{
-    this.timesPlayed[track.id]=1; // creo propiedad en obj 
+
+    this.timesPlayed.push({
+      trackId : track.id,
+      timesPlayed : 1
+      
+    });
     this.playedTracks.push(track);   
-    console.log(`track '${track.name}' agregado a "escuchados" `);
-    console.log(`track '${track.name}' escuchado ${this.timesPlayed[track.id]} veces`);
   }
   }
 
