@@ -143,7 +143,10 @@ class UNQfy {
 
   getAlbumById(id) {
     const album = this.getArtistAlbum(id);
-    return album;
+    if(album===undefined){
+      throw new AlbumDoesNotExistError();
+    }
+   return album;
   }
 
 
@@ -244,12 +247,12 @@ class UNQfy {
   }
 
 
-  deleteArtist(artistId){//si el artista existe elimina primero los tracks si existen de todas las playlists, y elimina al artista.
+  deleteArtist(artistId){//si el artista existe elimina primero los tracks (si existen) de todas las playlists, y elimina al artista.
     const artista = this.getArtistById(artistId);
     
     if(this.artistExists(artista)){
      this.deleteTracksFromPlaylists(artista.getTracks());
-     
+     this.deleteTracksFromUsers(artista.getTracks());///
      const index = this._artists.indexOf(artista);
      if (index > -1) {
       this._artists.splice(index, 1);
@@ -264,6 +267,10 @@ class UNQfy {
     this.playlists.forEach(p=> p.removeTracks(tracks));
   }
 
+  deleteTracksFromUsers(tracks){
+    this.users.forEach(u=>u.removeListenedTracks(tracks));///
+  }
+
   deleteAlbum(albumId){
 
     const artist= this._artists.find(a=>a.albums.includes(this.getAlbumById(albumId)));
@@ -273,6 +280,7 @@ class UNQfy {
       throw new AlbumDoesNotExistError;
     } else{
       this.deleteTracksFromPlaylists(album.tracks);//
+      this.deleteTracksFromUsers(album.tracks);///
       artist.removeAlbum(this.getAlbumById(albumId));
       return (`El álbum ha sido eliminado con éxito`);
     }
@@ -288,6 +296,7 @@ class UNQfy {
       throw new TrackDoesNotExistsError;
     } else{
       eliminado = artist.removeTrackFromAlbum(this.getTrackById(trackId))[0];//
+      this.deleteTracksFromUsers([eliminado]);
       if(playlists.length > 0){
        playlists.forEach(p=> p.removeTrack(trackId)); 
         }
@@ -302,10 +311,9 @@ class UNQfy {
       throw new PlaylistDoesNotExistError; 
     } else{
       const index = this.playlists.indexOf(playlist);
-      if (index > -1) {
        this.playlists.splice(index, 1);
        console.log("playlist[] despues de eliminar :", this.playlists);
-     }
+     
        return (`La playlist '${playlist.getName()}' ha sido eliminado con éxito`);
     }
 

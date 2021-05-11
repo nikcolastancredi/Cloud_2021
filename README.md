@@ -51,6 +51,9 @@ getAlbumById 'albumId'
 getTrackById 'trackId'
 getPlaylistById 'playlistId'
 playTrack 'userId' 'trackId'
+getPlayedTracks 'userId'
+getTimesPlayed 'userId' 'trackId'
+getThisIs 'artistId'
 
 ```
 

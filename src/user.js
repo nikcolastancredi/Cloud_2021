@@ -32,7 +32,7 @@ module.exports= class User{
       const trackIndex = this.timesPlayed.findIndex(t => t.trackId === track.id);
       this.timesPlayed[trackIndex].timesPlayed = priorValue + 1;
 
-  } else{
+  } else {
 
     this.timesPlayed.push({
       trackId : track.id,
@@ -55,11 +55,37 @@ module.exports= class User{
     if(this.trackAlreadyPlayed(trackId)){
     return this.timesPlayed[trackId];
     }
-    else{
+    else {
       return 0;
     }
   }
 
+  removeListenedTracks(tracks){ //recibe lista de tracks a eliminar en las listas de  playedTracks y timesPlayed
+    tracks.forEach(t => {
+      if(this.hasListenedTrack(t)){
+        this.removeTrack(t.id);
+      }
+    });
+    
+  }
+
+  hasListenedTrack(track){
+    return this.playedTracks.some(t=> t.id === track.id);
+  }
+
+
+  removeTrack(trackId){ // 
+    let index = this.playedTracks.findIndex(t=>t.id===trackId);
+    if (index > -1) {
+    this.playedTracks.splice(index, 1);
+  }
+index = this._timesPlayed.findIndex(t=>t.trackId===trackId);
+  if (index > -1) {
+  this.timesPlayed.splice(index, 1);
+  }
+
+}
+  
 
 
 };
