@@ -91,7 +91,8 @@ class Playlist {
       const index = this.tracks.findIndex(t=>t.id===trackId);
       if (index > -1) {
         return this.tracks.splice(index, 1);
-    }
+      }
+      this.duration = this.calculateDuration();
   }
     
     removeTracks(trackArray){//recibe una lista de tracks a eliminar si existen en la playlist
@@ -102,12 +103,6 @@ class Playlist {
         }
       });
   }
-  
-
-
-
-
-
 
 }
   module.exports = Playlist;
