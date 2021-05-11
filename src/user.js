@@ -53,7 +53,7 @@ module.exports= class User{
 
   getTimesPlayed(trackId){
     if(this.trackAlreadyPlayed(trackId)){
-    return this.timesPlayed[trackId];
+    return this.timesPlayed.find(t=>t.trackId === trackId).timesPlayed;
     }
     else {
       return 0;
