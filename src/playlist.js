@@ -90,7 +90,7 @@ class Playlist {
     removeTrack(trackId){
       const index = this.tracks.findIndex(t=>t.id===trackId);
       if (index > -1) {
-        return this.tracks.splice(index, 1);
+        this.tracks.splice(index, 1);
       }
       this.duration = this.calculateDuration();
   }

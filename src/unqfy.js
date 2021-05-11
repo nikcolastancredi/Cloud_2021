@@ -281,15 +281,15 @@ class UNQfy {
 
   deleteTrack(trackId){
     const artist = this._artists.find(a => a.hasTrack(trackId));
-    const playlist = this.playlists.find(p=>this.hasTrack(p,trackId));
+    const playlists = this.playlists.filter(p=>p.hasTrack(this.getTrackById(trackId)));
     let eliminado = {};
 
     if(artist===undefined){
       throw new TrackDoesNotExistsError;
     } else{
       eliminado = artist.removeTrackFromAlbum(this.getTrackById(trackId))[0];//
-      if(playlist!==undefined){
-       playlist.removeTrack(trackId); 
+      if(playlists.length > 0){
+       playlists.forEach(p=> p.removeTrack(trackId)); 
         }
       console.log(`Track '${eliminado.name}' id:${eliminado.id} eliminado con éxito!`);
     }    
