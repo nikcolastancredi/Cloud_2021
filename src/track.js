@@ -34,7 +34,7 @@ module.exports= class Track{
       uri: BASE_URL + '/track.lyrics.get',
       qs: {
           apikey: "80fb3133c673cb15bd564a787e6e041b",
-          track_id: "16394917"
+          track_id: await this.getTrackIdMusixMatch()
       },
       json: true // Automatically parses the JSON string in the response
   };
@@ -51,9 +51,7 @@ module.exports= class Track{
         
       }).catch((error) => {
         console.log('algo salio mal', error);
-     });     
-     console.log("fuera del get: "+this._lyrics)
-
+     });    
      return this._lyrics;
   }
 
@@ -61,22 +59,22 @@ module.exports= class Track{
     if(this._lyrics===null){
       await this.setLyrics()
     }
-    
+
     return this._lyrics
 
   }
 
-    getTracksIdMusicMach(){
+    async getTrackIdMusixMatch(){
     const request = {
       uri: BASE_URL + '/track.search',
       qs: {
           apikey: "80fb3133c673cb15bd564a787e6e041b",
           q_track: this.name
       },
-      json: true // Automatically parses the JSON string in the response
+      json: true
   };
 
-  return rp.get(
+  return await rp.get(
       request
   ).then((response) => {
 
