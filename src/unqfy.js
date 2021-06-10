@@ -429,9 +429,11 @@ class UNQfy {
   }
 
   // Visado_2
-   getLyrics(trackId){
+  async getLyrics(trackId){
+     
     const track = this.getTrackById(trackId);
-    return  track.getLyrics();
+    return  await track.getLyrics();
+    
   }
 
 

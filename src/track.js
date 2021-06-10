@@ -9,6 +9,7 @@ module.exports= class Track{
     this._name= name;
     this._duration= duration;
     this._genres= genres;
+    this._lyrics=null;
 
   }
 
@@ -27,9 +28,9 @@ module.exports= class Track{
     return this._genres;
   }
 
-   getLyrics() {
+ async setLyrics(){
 
-    const request = {
+    var options = {
       uri: BASE_URL + '/track.lyrics.get',
       qs: {
           apikey: "80fb3133c673cb15bd564a787e6e041b",
@@ -37,18 +38,32 @@ module.exports= class Track{
       },
       json: true // Automatically parses the JSON string in the response
   };
-
-  return rp.get(
-    request
+    this._lyrics = await rp.get(
+    options
       ).then((response) => {
-          const body = response.message.body;      
-          const lyrics = body.lyrics.lyrics_body;   
-          console.log("la letra: " + lyrics);    
-          return lyrics;
+        var header = response.message.header;
+          var body = response.message.body;      
+          var lyrics = body.lyrics.lyrics_body; 
+          if (header.status_code !== 200){
+            throw new Error('status code != 200');
+        }       
+          return lyrics
         
       }).catch((error) => {
-        throw error;
-    });
+        console.log('algo salio mal', error);
+     });     
+     console.log("fuera del get: "+this._lyrics)
+
+     return this._lyrics;
+  }
+
+   async getLyrics() {
+    if(this._lyrics===null){
+      await this.setLyrics()
+    }
+    
+    return this._lyrics
+
   }
 
     getTracksIdMusicMach(){

@@ -239,10 +239,10 @@ class Command {
     }
 }
 
-  getLyricsFunction (parameters, unqfy){
+  async getLyricsFunction (parameters, unqfy){
     if (parameters.length >= 1) {
-      console.log(
-        unqfy.getLyrics(parseInt(parameters[1])));
+       console.log(
+       await unqfy.getLyrics(parseInt(parameters[1])));
     } else {
       throw new CommandIncompleteError(parameters[0], 1);
     }
