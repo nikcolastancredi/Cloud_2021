@@ -14,6 +14,9 @@ const UserAlreadyExistsError = require('./errores/UserAlreadyExistsError');
 const UserDoesNotExistError = require('./errores/UserDoesNotExistsError');
 const PlaylistDoesNotExistError = require('./errores/PlaylistDoesNotExistsError');
 const User = require('./User');
+// const spoCliente = require('./src/clientApi/SpotifyCliente');
+// const spotifyClientInstance = new spoCliente.SpotifyCliente();
+
 
 
 class UNQfy {
@@ -423,6 +426,12 @@ class UNQfy {
 
   sortBy(arr, prop) {
     return arr.sort((a, b) => a[prop] - b[prop]);
+  }
+
+  // Visado_2
+   getLyrics(trackId){
+    const track = this.getTrackById(trackId);
+    return  track.getLyrics();
   }
 
 
