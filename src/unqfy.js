@@ -16,7 +16,8 @@ const PlaylistDoesNotExistError = require('./errores/PlaylistDoesNotExistsError'
 const User = require('./User');
 // const spoCliente = require('./src/clientApi/SpotifyCliente');
 // const spotifyClientInstance = new spoCliente.SpotifyCliente();
-
+const MusixMatchCliente =  require('./clientApi/MusixMatchCliente');
+const mmCliente = new MusixMatchCliente();
 
 
 class UNQfy {
@@ -430,10 +431,16 @@ class UNQfy {
 
   // Visado_2
   async getLyrics(trackId){
-     
     const track = this.getTrackById(trackId);
-    return  await track.getLyrics();
-    
+    if( track.getLyrics() === null ){
+     var data = await mmCliente.getLyrics(track);
+     track.setLyrics(data);
+      return data;
+    }
+    else {
+      return track.getLyrics();
+    }
+
   }
 
 

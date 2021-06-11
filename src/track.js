@@ -1,6 +1,4 @@
 const rp = require('request-promise');
-const BASE_URL = 'http://api.musixmatch.com/ws/1.1';
-
 
 module.exports= class Track{
 
@@ -28,62 +26,15 @@ module.exports= class Track{
     return this._genres;
   }
 
- async setLyrics(){
-
-    var options = {
-      uri: BASE_URL + '/track.lyrics.get',
-      qs: {
-          apikey: "80fb3133c673cb15bd564a787e6e041b",
-          track_id: await this.getTrackIdMusixMatch()
-      },
-      json: true // Automatically parses the JSON string in the response
-  };
-    this._lyrics = await rp.get(
-    options
-      ).then((response) => {
-        var header = response.message.header;
-          var body = response.message.body;      
-          var lyrics = body.lyrics.lyrics_body; 
-          if (header.status_code !== 200){
-            throw new Error('status code != 200');
-        }       
-          return lyrics
-        
-      }).catch((error) => {
-        console.log('algo salio mal', error);
-     });    
-     return this._lyrics;
+  setLyrics(lyrics){
+      this._lyrics = lyrics;
   }
 
-   async getLyrics() {
-    if(this._lyrics===null){
-      await this.setLyrics()
-    }
+    getLyrics() {
 
     return this._lyrics
+   }
+  
 
-  }
 
-    async getTrackIdMusixMatch(){
-    const request = {
-      uri: BASE_URL + '/track.search',
-      qs: {
-          apikey: "80fb3133c673cb15bd564a787e6e041b",
-          q_track: this.name
-      },
-      json: true
-  };
-
-  return await rp.get(
-      request
-  ).then((response) => {
-
-      const tracks = response.message.body.track_list;
-
-      const id = tracks[0].track.track_id;
-
-      return id;
-
-  });
-  }
 };
