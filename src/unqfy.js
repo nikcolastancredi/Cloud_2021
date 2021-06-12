@@ -457,7 +457,16 @@ class UNQfy {
     const classes = [UNQfy, Artist, Track, Playlist, User, Album];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
+
+  getUNQfy(filename = "data.json") {
+    let unqfy = new UNQfy();
+    if (fs.existsSync(filename)) {
+      unqfy = UNQfy.load(filename);
+    }
+    return unqfy;
+  }
 }
+
 
 // COMPLETAR POR EL ALUMNO: exportar todas las clases que necesiten ser utilizadas desde un modulo cliente
 module.exports = {
