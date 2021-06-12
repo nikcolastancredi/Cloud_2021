@@ -44,7 +44,6 @@ app.post('/artists', (req, res, next) => {
 
     // checkValidInput(req.body, { name: 'string', country: 'string' }, res, next);
 
-
     let artist = null;
     try {
         artist = req.unq.addArtist(req.body);
