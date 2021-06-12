@@ -1,4 +1,4 @@
-const rp = require('request-promise');
+
 
 module.exports= class Track{
 
@@ -31,7 +31,6 @@ module.exports= class Track{
   }
 
     getLyrics() {
-
     return this._lyrics;
    }
   
