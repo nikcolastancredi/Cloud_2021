@@ -35,5 +35,6 @@
        "require-jsdoc": "off",
        "react/prop-types": "off",
        "no-console": "off"
+
     }
 }

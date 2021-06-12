@@ -1,4 +1,4 @@
-
+const rp = require('request-promise');
 
 module.exports= class Track{
 
@@ -7,6 +7,7 @@ module.exports= class Track{
     this._name= name;
     this._duration= duration;
     this._genres= genres;
+    this._lyrics=null;
 
   }
 
@@ -24,4 +25,16 @@ module.exports= class Track{
   get genres(){
     return this._genres;
   }
+
+  setLyrics(lyrics){
+      this._lyrics = lyrics;
+  }
+
+    getLyrics() {
+
+    return this._lyrics;
+   }
+  
+
+
 };

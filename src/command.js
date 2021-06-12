@@ -24,7 +24,8 @@ class Command {
       getTracksMatchingArtist : this.getTracksMatchingArtistFuncion,
       getPlayedTracks : this.getPlayedTracksFunction,
       getTimesPlayed : this.getTimesPlayedFunction,
-      getThisIs : this.getThisIsFunction
+      getThisIs : this.getThisIsFunction,
+      getLyrics : this.getLyricsFunction
 
     };
   }
@@ -237,6 +238,15 @@ class Command {
       throw new CommandIncompleteError(parameters[0], 1);
     }
 }
+
+  async getLyricsFunction (parameters, unqfy){
+    if (parameters.length >= 1) {
+       console.log(
+       await unqfy.getLyrics(parseInt(parameters[1])));
+    } else {
+      throw new CommandIncompleteError(parameters[0], 1);
+    }
+  }
   
 }
 
