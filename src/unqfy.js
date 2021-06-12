@@ -434,13 +434,14 @@ class UNQfy {
     const track = this.getTrackById(trackId);
     if( track.getLyrics() === null ){
      var data = await mmCliente.getLyrics(track);
+     console.log()
      track.setLyrics(data);
+     this.save('data.json');
       return data;
     }
     else {
       return track.getLyrics();
     }
-
   }
 
 

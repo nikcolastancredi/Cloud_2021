@@ -32,7 +32,7 @@ module.exports= class Track{
 
     getLyrics() {
 
-    return this._lyrics
+    return this._lyrics;
    }
   
 
