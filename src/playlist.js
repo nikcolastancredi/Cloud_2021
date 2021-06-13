@@ -99,7 +99,6 @@ class Playlist {
       trackArray.forEach(t => {
         if(this.hasTrack(t)){
           this.removeTrack(t.id);
-          console.log(`track eliminado de playlist : ${t.name}`);
         }
       });
   }

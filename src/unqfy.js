@@ -16,7 +16,9 @@ const PlaylistDoesNotExistError = require('./errores/PlaylistDoesNotExistsError'
 const User = require('./User');
 // const spoCliente = require('./src/clientApi/SpotifyCliente');
 // const spotifyClientInstance = new spoCliente.SpotifyCliente();
-
+const MusixMatchCliente =  require('./clientApi/MusixMatchCliente');
+const mmCliente = new MusixMatchCliente();
+const filename = 'data.json';
 
 
 class UNQfy {
@@ -142,7 +144,24 @@ class UNQfy {
     }
   }
 
+  getArtists(){
+    return this._artists;
+  }
   
+  getArtistByName(name){
+    const all = this.searchByName(name);
+    return all.artists;
+  }
+
+  updateArtist(id, data){
+    const artistSearch = this.getArtistById(id);
+    artistSearch.setName(data.name);
+    artistSearch.setCountry(data.country);
+    const index = this._artists.findIndex(a => a.id === id);
+    this._artists.splice(index, 1,artistSearch);
+
+    return (artistSearch);
+  }
 
   getAlbumById(id) {
     const album = this.getArtistAlbum(id);
@@ -152,6 +171,15 @@ class UNQfy {
    return album;
   }
 
+  getAllAlbums(){
+    const albums = this._artists.flatMap(artist => artist.albums);
+    return albums;
+  }
+
+  getAlbumByName(name){
+    const all = this.searchByName(name);
+    return all.album;
+  }
 
   getArtistAlbum(id) {
     let album = undefined;
@@ -250,7 +278,8 @@ class UNQfy {
   }
 
 
-  deleteArtist(artistId){//si el artista existe elimina primero los tracks (si existen) de todas las playlists, y elimina al artista.
+  deleteArtist(artistId){
+    //si el artista existe elimina primero los tracks (si existen) de todas las playlists, y elimina al artista.
     const artista = this.getArtistById(artistId);
     
     if(this.artistExists(artista)){
@@ -259,12 +288,11 @@ class UNQfy {
      const index = this._artists.indexOf(artista);
      if (index > -1) {
       this._artists.splice(index, 1);
-    }
-      return (`El artista '${artista.name}' ha sido eliminado con éxito`);
-    } else{
+    }else{
       throw new ArtistDoesNotExistError;
     }
   }
+}
 
   deleteTracksFromPlaylists(tracks){//
     this.playlists.forEach(p=> p.removeTracks(tracks));
@@ -429,13 +457,22 @@ class UNQfy {
   }
 
   // Visado_2
-   getLyrics(trackId){
+  async getLyrics(trackId){
     const track = this.getTrackById(trackId);
-    return  track.getLyrics();
+    if( track.getLyrics() === null ){
+     var data = await mmCliente.getLyrics(track);
+     console.log()
+     track.setLyrics(data);
+     this.save('data.json');
+      return data;
+    }
+    else {
+      return track.getLyrics();
+    }
   }
 
 
-  save(filename) {
+  save() {
     const serializedData = picklify.picklify(this);
     fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));
   }
@@ -447,7 +484,16 @@ class UNQfy {
     const classes = [UNQfy, Artist, Track, Playlist, User, Album];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
+
+  getUNQfy(filename = "data.json") {
+    let unqfy = new UNQfy();
+    if (fs.existsSync(filename)) {
+      unqfy = UNQfy.load(filename);
+    }
+    return unqfy;
+  }
 }
+
 
 // COMPLETAR POR EL ALUMNO: exportar todas las clases que necesiten ser utilizadas desde un modulo cliente
 module.exports = {
