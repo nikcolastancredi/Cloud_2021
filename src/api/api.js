@@ -5,13 +5,20 @@ const bodyParser = require('body-parser');
 const unq = require("../unqfy"); // importamos el modulo unqfy
 const unqfy = new unq.UNQfy();
 const artistDoesNotExistsError = require ('../errores/ArtistDoesNotExistError');
-const duplicateArtist = require('../errores/DuplicateArtistError');
+
+app.use((req, res, next) => {
+    req.unqfy = unqfy.getUNQfy();
+    next();
+});
 
 app.use(bodyParser.urlencoded({ extended:true }));
 app.use(bodyParser.json());
 
+
 const port = process.env.PORT || 8000;
 const router = express.Router();
+
+
 
 router.get('/' , (req,res) => {
     res.status(201); //puedo cambiar el status code
@@ -42,15 +49,15 @@ function checkValidInput(data, expectedKeys, res, next) {
 
 app.post('/artists', (req, res, next) => {
 
-    // checkValidInput(req.body, { name: 'string', country: 'string' }, res, next);
+    checkValidInput(req.body, { name: 'string', country: 'string' }, res, next);
 
     let artist = null;
     try {
-        artist = req.unq.addArtist(req.body);
-        unqfy.save();
+        artist = req.unqfy.addArtist(req.body);
+        req.unqfy.save('data.json');
         res.status(201).json(artist);
     } catch (error) {
-        throw next(new duplicateArtist());
+        throw next(error);
     }
 });
 
@@ -62,13 +69,10 @@ app.get('/artists/:artistId', (req, res, next) => {
     if (!artist) {
         throw next(new artistDoesNotExistsError());
     }
-
     res.status(200).json(artist);
 });
 
-app.use((req, res, next) => {
-    req.unqfy = unqfy.getUNQfy();
-    next();
-});
+
+
 
 
