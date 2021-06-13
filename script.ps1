@@ -1,4 +1,5 @@
 Set-Location 'C:\Users\LEGION\Desktop\projects\servicios cloud\Cloud_2021'
+Remove-Item 'C:\Users\LEGION\Desktop\projects\servicios cloud\Cloud_2021\data.json'
 
 node main.js addArtist 'Imagine dragons' 'USA'
 node main.js addArtist 'Queen' 'UK'

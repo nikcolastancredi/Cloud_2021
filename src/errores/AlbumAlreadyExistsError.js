@@ -1,7 +1,7 @@
 
 module.exports= class AlbumAlreadyExistsError extends Error{
-  constructor(){
-    super(' This album already exists');
-    this.name= 'ArtistExistsError';
+  constructor(name){
+    super(`The album ${name} already exists`);
+    this.name= 'AlbumAlreadyExistsError';
   }
 };

@@ -25,7 +25,8 @@ class Command {
       getPlayedTracks : this.getPlayedTracksFunction,
       getTimesPlayed : this.getTimesPlayedFunction,
       getThisIs : this.getThisIsFunction,
-      getLyrics : this.getLyricsFunction
+      getLyrics : this.getLyricsFunction,
+      fillAlbumsForArtist : this.fillAlbumsForArtistFunction
 
     };
   }
@@ -246,6 +247,14 @@ class Command {
     } else {
       throw new CommandIncompleteError(parameters[0], 1);
     }
+  }
+  fillAlbumsForArtistFunction(parameters, unqfy){
+      if (parameters.length >= 2) {
+        console.log(
+          unqfy.fillAlbumsForArtist(parseInt(parameters[1])));
+      } else {
+        throw new CommandIncompleteError(parameters[0], 1);
+      }
   }
   
 }

@@ -14,11 +14,13 @@ const UserAlreadyExistsError = require('./errores/UserAlreadyExistsError');
 const UserDoesNotExistError = require('./errores/UserDoesNotExistsError');
 const PlaylistDoesNotExistError = require('./errores/PlaylistDoesNotExistsError');
 const User = require('./User');
-// const spoCliente = require('./src/clientApi/SpotifyCliente');
-// const spotifyClientInstance = new spoCliente.SpotifyCliente();
 const MusixMatchCliente =  require('./clientApi/MusixMatchCliente');
 const mmCliente = new MusixMatchCliente();
 const filename = 'data.json';
+const spotifyClient = require('./clientApi/spotifyClient');
+const spotify = new spotifyClient.SpotifyClient();
+
+
 
 
 class UNQfy {
@@ -461,9 +463,8 @@ class UNQfy {
     const track = this.getTrackById(trackId);
     if( track.getLyrics() === null ){
      var data = await mmCliente.getLyrics(track);
-     console.log()
      track.setLyrics(data);
-     this.save('data.json');
+     this.save(filename);
       return data;
     }
     else {
@@ -471,8 +472,17 @@ class UNQfy {
     }
   }
 
+  async fillAlbumsForArtist(artistId) {
+    const artist = this.getArtistById(artistId);
+    const albumsFromSpotify = await spotify.getAlbums(artist.name);
 
-  save() {
+    albumsFromSpotify.forEach(album =>this.addAlbum(artist.id, {name : album.name, year : album.release_date.substr(0,4)}));
+    
+    return albumsFromSpotify;
+  }
+
+
+  save(filename) {
     const serializedData = picklify.picklify(this);
     fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));
   }
