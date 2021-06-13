@@ -5,38 +5,33 @@ const AlbumDoesNotExistError= require('./errores/AlbumDoesNotExistError');
 module.exports= class Artist{
 
   constructor(name,country,id){
-    this._id= id;
-    this._name=name;
-    this._country=country;
-    this._albums= [];
-  }
-  get id(){
-    return this._id;
-  }
-  get name(){
-    return this._name;
-  }
-
-  get country(){
-    return this._country;
+    this.id = id;
+    this.name=name;
+    this.country=country;
+    this.albums= [];
   }
   
-  get albums(){
-    return this._albums;
+
+  setName(name){
+    this.name = name;
+  }
+
+  setCountry(country){
+    this.country = country;
   }
 
   addAlbum(album){
-    if(this._albums.some(a => a.name===album.name)){
+    if(this.albums.some(a => a.name===album.name)){
       throw new AlbumAlreadyExistsError(); 
     }
     else{
-       this._albums.push(album);
+       this.albums.push(album);
 
     }
   }
 
   removeAlbum(album){
-    if(this._albums.some(a => a.id===album.id)){
+    if(this.albums.some(a => a.id===album.id)){
       const index = this.albums.indexOf(album);
       if (index > -1) {
        this.albums.splice(index, 1);
