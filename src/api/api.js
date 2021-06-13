@@ -1,18 +1,24 @@
 const badRequest = require('./badRequest');
 const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
 const unq = require("../unqfy"); // importamos el modulo unqfy
-const unqfy = new unq.UNQfy();
 const artistDoesNotExistsError = require ('../errores/ArtistDoesNotExistError');
+const TrackDoesNotExistsError = require('../errores/TrackDoesNotExistsError');
+
+const APIError = require('./APIError');
+
+const unqfy = new unq.UNQfy();
+const app = express();
+
 
 app.use((req, res, next) => {
     req.unqfy = unqfy.getUNQfy();
     next();
 });
 
-app.use(bodyParser.urlencoded({ extended:true }));
+//middleware que parsea los body de los request y agrega el atributo body al request con el json parseado
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended:true }));
 
 
 const port = process.env.PORT || 8000;
@@ -73,6 +79,20 @@ app.get('/artists/:artistId', (req, res, next) => {
 });
 
 
+app.get('/tracks/:trackId/lyrics',  (req, res, next) => {
+    const trackId = parseInt(req.params.trackId);
 
+    req.unqfy.getLyrics(trackId).then(data=>{
+        res.status(200).json(data);
+        })
+        .catch(err=>{
+            res.status(404);
+            res.json({
+                msg: 'RESOURCE_NOT_FOUND',
+                error: err,
+            });
+            
+        });
+});
 
 
