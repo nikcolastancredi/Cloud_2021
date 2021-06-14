@@ -22,7 +22,8 @@ module.exports= class Artist{
 
   addAlbum(album){
     if(this.albums.some(a => a.name===album.name)){
-      throw new AlbumAlreadyExistsError(); 
+      console.log(new AlbumAlreadyExistsError(album.name).message);
+      // throw new AlbumAlreadyExistsError(album.name); 
     }
     else{
        this.albums.push(album);

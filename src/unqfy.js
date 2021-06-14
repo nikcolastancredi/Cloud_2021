@@ -2,10 +2,10 @@
 const picklify = require('picklify'); // para cargar/guardar unqfy
 const fs = require('fs'); // para cargar/guarfar unqfy
 
-const Artist = require('./Artist');
-const Album = require('./Album');
-const Track = require('./Track');
-const Playlist = require('./Playlist');
+const Artist = require('./artist');
+const Album = require('./album');
+const Track = require('./track');
+const Playlist = require('./playlist');
 const ArtistExistError= require('./errores/ArtistAlreadyExistsError');
 const ArtistDoesNotExistError=require('./errores/ArtistDoesNotExistError');
 const AlbumDoesNotExistError= require('./errores/AlbumDoesNotExistError');
@@ -13,12 +13,14 @@ const TrackDoesNotExistsError = require('./errores/TrackDoesNotExistsError');
 const UserAlreadyExistsError = require('./errores/UserAlreadyExistsError');
 const UserDoesNotExistError = require('./errores/UserDoesNotExistsError');
 const PlaylistDoesNotExistError = require('./errores/PlaylistDoesNotExistsError');
-const User = require('./User');
-// const spoCliente = require('./src/clientApi/SpotifyCliente');
-// const spotifyClientInstance = new spoCliente.SpotifyCliente();
+const User = require('./user');
 const MusixMatchCliente =  require('./clientApi/MusixMatchCliente');
 const mmCliente = new MusixMatchCliente();
 const filename = 'data.json';
+const spotifyClient = require('./clientApi/spotifyClient');
+const spotify = new spotifyClient.SpotifyClient();
+
+
 
 
 class UNQfy {
@@ -462,7 +464,7 @@ class UNQfy {
     if( track.getLyrics() === null ){
      var data = await mmCliente.getLyrics(track);
      track.setLyrics(data);
-     this.save('data.json');
+     this.save(filename);
       return data;
     }
     else {
@@ -478,8 +480,17 @@ class UNQfy {
     throw new AlbumDoesNotExistError();
 
   }
+  async fillAlbumsForArtist(artistId) {
+    const artist = this.getArtistById(artistId);
+    const albumsFromSpotify = await spotify.getAlbums(artist.name);
 
-  save() {
+    albumsFromSpotify.forEach(album =>this.addAlbum(artist.id, {name : album.name, year : album.release_date.substr(0,4)}));
+    
+    return albumsFromSpotify;
+  }
+
+
+  save(filename) {
     const serializedData = picklify.picklify(this);
     fs.writeFileSync(filename, JSON.stringify(serializedData, null, 2));
   }
