@@ -1,4 +1,3 @@
-const badRequest = require('./errorApi/BadRequest');
 const express = require('express');
 const bodyParser = require('body-parser');
 const unq = require("../unqfy"); // importamos el modulo unqfy
@@ -8,7 +7,7 @@ const artistDoesNotExistsErrorApi = require ('./errorApi/ArtistDoesNotExistsErro
 const artistAlreadyExistsErrorApi = require('./errorApi/ArtistAlreadyExistsErrorApi');
 const albumAlreadyExistsErrorApi = require('./errorApi/AlbumAlreadyExistsErrorApi');
 const albumDoesNotExistErrorApi = require('./errorApi/AlbumDoesNotExistErrorApi');
-const InvalidInputError = require('./APIError');
+const APIError = require('./APIError');
 const { Router } = require('express');
 
 const app = express();
@@ -55,7 +54,7 @@ function valid(data, expectedKeys) {
 
 function checkValidInput(data, expectedKeys, res, next) {
     if (!valid(data, expectedKeys)) {
-        throw next(new badRequest());
+        throw next(new APIError.BadRequest());
     }
 }
 
@@ -94,8 +93,15 @@ artists.post('/artists', (req, res, next) => {
         req.unqfy.save(filename);
         res.status(201).json(artist);
     } catch (error) {
-        res.status(404).json();
-        throw next(artistAlreadyExistsErrorApi);
+        if(error.name === 'ArtistExistsError'){
+            const err = new APIError.ResourceAlreadyExist();
+            err.message=error.message;
+            res.status(err.status).json(err);
+        }else {
+            const err = new APIError.BadRequest();
+            err.message=error.message;
+            res.status(err.status).json(err);
+        }   
         
     }
 });
