@@ -8,7 +8,8 @@ const artistDoesNotExistsErrorApi = require ('./errorApi/ArtistDoesNotExistsErro
 const artistAlreadyExistsErrorApi = require('./errorApi/ArtistAlreadyExistsErrorApi');
 const albumAlreadyExistsErrorApi = require('./errorApi/AlbumAlreadyExistsErrorApi');
 const albumDoesNotExistErrorApi = require('./errorApi/AlbumDoesNotExistErrorApi');
-const APIError = require('./APIError');
+const InvalidInputError = require('./APIError');
+const { Router } = require('express');
 
 const app = express();
 const artists = express();
@@ -23,9 +24,9 @@ app.use((req, res, next) => {
 });
 
 //middleware que parsea los body de los request y agrega el atributo body al request con el json parseado
-app.use(bodyParser.json());
+app.use(bodyParser.json());// Parsea el JSON y deja el resultado en req.body
 app.use(bodyParser.urlencoded({ extended:true }));
-
+app.use(errorHandler); // Registro de un manejador de errores
 app.use('/api', artists, albums) ;
 
 const port = process.env.PORT || 8000;
@@ -36,10 +37,9 @@ const port = process.env.PORT || 8000;
 //     res.send(JSON.stringify({message: 'welcome to the api'}));
 // });
 
-
 app.listen(
     port,
-    () => console.log('Esto funciona en puerto : ' + port)
+    () => console.log('Running on port: ' + port)
 );
 
 
@@ -57,6 +57,30 @@ function checkValidInput(data, expectedKeys, res, next) {
     }
 }
 
+
+function errorHandler(err, req, res, next) {
+    if (req.baseUrl!=='/api'){
+        res.status(err.status);
+     res.json({status: err.status, errorCode: "RESOURCE_NOT_FOUND"});
+       }
+    console.error(err); // imprimimos el error en consola
+   if (err.type === 'entity.parse.failed'){
+      // body-parser error para JSON invalido
+      res.status(err.status);
+      res.json({status: err.status, errorCode:"BAD_REQUEST"});
+    }
+    
+    else {
+      next(err); // continua con el manejador de errores por defecto
+    }
+ }
+
+
+
+
+//------------------------ARTISTAS------------------------//
+
+//POST - agrega un nuevo artista
 artists.post('/artists', (req, res, next) => {
 
     checkValidInput(req.body, { name: 'string', country: 'string' }, res, next);
@@ -74,6 +98,7 @@ artists.post('/artists', (req, res, next) => {
     }
 });
 
+//GET - obtiene un artista a partir de su ID
 artists.get('/artists/:artistId', (req, res, next) => {
     // const artistId = parseInt(req.params.artistId);
     // const artist = req.unqfy.getArtistById(artistId);
@@ -100,6 +125,9 @@ artists.get('/artists/:artistId', (req, res, next) => {
 //         res.status(200).json(artist);
 // });
 
+
+
+//GET - busca artistas que matchean con param name
 artists.get('/artists', (req, res, next) => {
     const name = req.query.name || '';
     if(name){
@@ -112,6 +140,7 @@ artists.get('/artists', (req, res, next) => {
     
 });
 
+//UPDATE - actualiza el artista
 artists.put('/artists/:artistId', (req, res, next) => {
     const artistId = parseInt(req.params.artistId);
     checkValidInput(req.body, { name: 'string', country: 'string' }, res, next);
@@ -126,6 +155,7 @@ artists.put('/artists/:artistId', (req, res, next) => {
 
 });
 
+//DELETE - borra artista
 artists.delete('/artists/:artistId', (req,res,next) => {
     const artistId = parseInt(req.params.artistId);
     // const artist = req.unqfy.getArtistById(artistId);
@@ -138,11 +168,16 @@ artists.delete('/artists/:artistId', (req,res,next) => {
     }
 });
 
-app.get('/tracks/:trackId/lyrics',  (req, res, next) => {
+//GET /api/tracks/:trackId/lyrics
+app.get('/api/tracks/:trackId/lyrics',  (req, res, next) => {
     const trackId = parseInt(req.params.trackId);
 
     req.unqfy.getLyrics(trackId).then(data=>{
-        res.status(200).json(data);
+        
+        if(data.status_code!==200){
+            res.status(data.status_code);
+        }
+        res.status(200).json(JSON.parse(data.message));
         })
         .catch(err=>{
             res.status(404);
@@ -154,6 +189,10 @@ app.get('/tracks/:trackId/lyrics',  (req, res, next) => {
         });
 });
 
+
+//-------------------------ALBUMS-------------------------//
+
+//POST - agrega un album a un artista
 albums.post('/albums', (req, res, next) => {
     checkValidInput(req.body, { artistId: 'number', name: 'string', year: 'number' }, res, next);
     const params = req.body;
@@ -175,6 +214,8 @@ albums.post('/albums', (req, res, next) => {
     res.status(201).json(newAlbum);
 });
 
+
+//GET - Obtiene un album a partir de un Id
 albums.get('/albums/:albumId', (req, res, next) => {
     const albumId = parseInt(req.params.albumId);
     const album = req.unqfy.getAlbumById(albumId);
@@ -185,7 +226,7 @@ albums.get('/albums/:albumId', (req, res, next) => {
 });
 
 
-
+//GET - Busca albums a partir de param Name
 albums.get('/albums/', (req, res, next) => {
     const name = req.query.name || '';
     if(name){
@@ -197,3 +238,34 @@ albums.get('/albums/', (req, res, next) => {
     }
     
 });
+
+
+//DELETE - borra un album por id
+albums.delete('/albums/:albumId', (req,res,next) => {
+    const albumId = parseInt(req.params.artistId);
+    // const artist = req.unqfy.getArtistById(artistId);
+    try{
+        req.unqfy.deleteAlbum(albumId);
+        req.unqfy.save();
+        res.status(204).json();
+    }catch (error){
+        throw albumDoesNotExistErrorApi(); // poner el error correspondiente
+    }
+});
+
+//actualiza el año de un album
+albums.patch('/albums/:albumId', (req, res, next) => {
+    const albumId = parseInt(req.params.albumId);
+    const newYear = req.body.year;
+
+    try{
+        req.unqfy.updateAlbumYear(albumId,newYear);
+    }catch (error){
+        throw new albumDoesNotExistErrorApi();
+    }
+
+});
+
+
+
+

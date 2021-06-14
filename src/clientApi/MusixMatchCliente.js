@@ -21,13 +21,20 @@ module.exports = class MusixMatchCliente {
       options
         ).then((response) => {
           var header = response.message.header;
-          if (header.status_code !== 200){
-            throw new Error('status code != 200');}
+          var statusCode = header.status_code;
+          if (statusCode !== 200){
+            return {
+              status_code: statusCode
+            }
+           }
             var body = response.message.body;      
             var lyrics = body.lyrics.lyrics_body; 
-            return lyrics
+            return {
+              status_code: statusCode,
+              message: lyrics
+            }
 
-        }).catch((error) => {
+          }).catch((error) => {
           console.log('algo salio mal', error);
        });
   

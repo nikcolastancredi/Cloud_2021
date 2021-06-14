@@ -470,6 +470,14 @@ class UNQfy {
     }
   }
 
+  updateAlbumYear(id, year){
+    const albumEdit = this.getAlbumById(id);
+    if (albumEdit){
+      albumEdit.setYear(year);
+    }
+    throw new AlbumDoesNotExistError();
+
+  }
 
   save() {
     const serializedData = picklify.picklify(this);

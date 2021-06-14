@@ -4,25 +4,10 @@ const TrackDoesNotExistsError= require('./errores/TrackDoesNotExistsError');
 module.exports= class Album{
 
   constructor(name, year,id){
-    this._id= id;
-    this._name=name;
-    this._year=year;
-    this._tracks = [];
-  }
-
-  get id(){
-    return this._id;
-  }
-  get name(){
-    return this._name;
-  }
-
-  get year(){
-    return this._year;
-  }
-
-  get tracks(){
-    return this._tracks;
+    this.id= id;
+    this.name=name;
+    this.year=year;
+    this.tracks = [];
   }
 
 
