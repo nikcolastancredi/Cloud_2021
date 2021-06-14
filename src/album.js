@@ -39,7 +39,7 @@ module.exports= class Album{
   }
 
   addTrack(track){
-    if(this._tracks.some( t => t.name === track.name)){
+    if(this.tracks.some( t => t.name === track.name)){
       throw new TrackAlreadyExistsError();
     }else{
       this.tracks.push(track);

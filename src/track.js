@@ -43,7 +43,7 @@ module.exports= class Track{
   }
 
   getLyrics() {
-    return this._yrics;
+    return this.lyrics;
    }
   
 

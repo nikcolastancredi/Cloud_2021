@@ -9,6 +9,7 @@ const app = express();
 const artists = require('./artistsRoute');
 const albums = require('./albumsRoute');
 const playlists = require('./playlistsRoute');
+const tracks = require('./trackRoute');
 
 const unqfy = new unq.UNQfy();
 
@@ -22,7 +23,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());// Parsea el JSON y deja el resultado en req.body
 app.use(bodyParser.urlencoded({ extended:true }));
 app.use(errorHandler); // Registro de un manejador de errores
-app.use('/api', artists, albums, playlists) ;
+app.use('/api', artists, albums, playlists,tracks) ;
 
 const port = process.env.PORT || 8000;
 
@@ -63,10 +64,10 @@ function errorHandler(err, req, res, next) {
       res.status(err.status);
       res.json({status: err.status, errorCode:"BAD_REQUEST"});
     }
-    //else if (req.baseUrl!=='/api'){
-    //    res.status(err.status);
-     //res.json({status: err.status, errorCode: "RESOURCE_NOT_FOUND"});
-    //   }
+    else if (req.baseUrl!=='/api'){
+        res.status(err.status);
+        res.json({status: err.status, errorCode: "RESOURCE_NOT_FOUND"});
+       }
     else {
       next(err); // continua con el manejador de errores por defecto
     }

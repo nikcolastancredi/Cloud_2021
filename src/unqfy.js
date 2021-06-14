@@ -465,13 +465,15 @@ class UNQfy {
   async getLyrics(trackId){
     const track = this.getTrackById(trackId);
     if( track.getLyrics() === null ){
-     var data = await mmCliente.getLyrics(track);
-     track.setLyrics(data);
+     const data = await mmCliente.getLyrics(track);
+     track.setLyrics(data.body);
      this.save(filename);
       return data;
     }
     else {
-      return track.getLyrics();
+      return {
+        status_code: 200,
+        body:track.getLyrics()};
     }
   }
 

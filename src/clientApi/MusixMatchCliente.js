@@ -8,7 +8,7 @@ module.exports = class MusixMatchCliente {
       }
 
     async getLyrics(track){
-    var options = {
+    let options = {
         uri: BASE_URL + '/track.lyrics.get',
         qs: {
             apikey: key,
@@ -20,19 +20,19 @@ module.exports = class MusixMatchCliente {
         let data = await rp.get(
       options
         ).then((response) => {
-          var header = response.message.header;
-          var statusCode = header.status_code;
+          const header = response.message.header;
+          const statusCode = header.status_code;
           if (statusCode !== 200){
             return {
               status_code: statusCode
-            }
+            };
            }
-            var body = response.message.body;      
-            var lyrics = body.lyrics.lyrics_body; 
+            const body = response.message.body;      
+            const lyrics = body.lyrics.lyrics_body; 
             return {
               status_code: statusCode,
-              message: lyrics
-            }
+              body: lyrics
+            };
 
           }).catch((error) => {
           console.log('algo salio mal', error);
