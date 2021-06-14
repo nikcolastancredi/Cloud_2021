@@ -95,11 +95,9 @@ artists.post('/artists', (req, res, next) => {
     } catch (error) {
         if(error.name === 'ArtistExistsError'){
             const err = new APIError.ResourceAlreadyExist();
-            err.message=error.message;
             res.status(err.status).json(err);
         }else {
             const err = new APIError.BadRequest();
-            err.message=error.message;
             res.status(err.status).json(err);
         }   
         
