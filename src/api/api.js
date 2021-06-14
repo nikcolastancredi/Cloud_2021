@@ -10,6 +10,8 @@ const albumAlreadyExistsErrorApi = require('./errorApi/AlbumAlreadyExistsErrorAp
 const albumDoesNotExistErrorApi = require('./errorApi/AlbumDoesNotExistErrorApi');
 const artists = express();
 const albums = express();
+const filename = 'data.json';
+const playlists = require('./playlistsRoute');
 
 
 app.use((req, res, next) => {
@@ -20,7 +22,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.urlencoded({ extended:true }));
 app.use(bodyParser.json());
 
-app.use('/api', artists, albums) ;
+app.use('/api', artists, albums, playlists) ;
 
 const port = process.env.PORT || 8000;
 
@@ -59,7 +61,7 @@ artists.post('/artists', (req, res, next) => {
     let artist = null;
     try {
         artist = req.unqfy.addArtist(req.body);
-        req.unqfy.save();
+        req.unqfy.save(filename);
         res.status(201).json(artist);
     } catch (error) {
         res.status(404).json();
@@ -112,7 +114,7 @@ artists.put('/artists/:artistId', (req, res, next) => {
     let artist = null;
     try {
         artist = req.unqfy.updateArtist(artistId, req.body);
-        req.unqfy.save();
+        req.unqfy.save(filename);
         res.status(200).json(artist);
     } catch (error) {
         throw next(artistDoesNotExistsErrorApi); // poner el error correspondiente
@@ -125,7 +127,7 @@ artists.delete('/artists/:artistId', (req,res,next) => {
     // const artist = req.unqfy.getArtistById(artistId);
     try{
         req.unqfy.deleteArtist(artistId);
-        req.unqfy.save();
+        req.unqfy.save(filename);
         res.status(204).json();
     }catch (error){
         throw next(artistDoesNotExistsErrorApi); // poner el error correspondiente
@@ -150,7 +152,7 @@ albums.post('/albums', (req, res, next) => {
     }
 
     const newAlbum = req.unqfy.addAlbum(params.artistId, albumParam);
-    req.unqfy.save();
+    req.unqfy.save(filename);
     res.status(201).json(newAlbum);
 });
 
