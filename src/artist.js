@@ -11,7 +11,9 @@ module.exports= class Artist{
     this.albums= [];
   }
   
-
+  getName(){
+    return this.name;
+  }
   setName(name){
     this.name = name;
   }
@@ -20,6 +22,22 @@ module.exports= class Artist{
     this.country = country;
   }
 
+  getCountry(){
+    return this.country;
+  }
+
+  getId(){
+    return this.id;
+  }
+
+  setId(id){
+    this.id = id;
+  }
+
+  getAlbums(){
+    return this.albums;
+  }
+  
   addAlbum(album){
     if(this.albums.some(a => a.name===album.name)){
       console.log(new AlbumAlreadyExistsError(album.name).message);
@@ -30,6 +48,7 @@ module.exports= class Artist{
 
     }
   }
+
 
   removeAlbum(album){
     if(this.albums.some(a => a.id===album.id)){

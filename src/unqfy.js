@@ -51,7 +51,7 @@ class UNQfy {
     }
 
     else{
-      const newArtist= new Artist(artistData.name,artistData.country, this.getUniqueId());
+      const newArtist= new Artist(artistData.name, artistData.country, this.getUniqueId());
       this._artists.push(newArtist);
       return newArtist;
 
@@ -60,7 +60,7 @@ class UNQfy {
 
   artistExists(artistData){
     return (this._artists.some(
-      artist => artist.name === artistData.name)
+      artist => artist.getName() === artistData.name)
       );
   }
   
@@ -98,7 +98,7 @@ class UNQfy {
      - una propiedad year (number) */
     const newAlbum = new Album (albumData.name, albumData.year, this.getUniqueId());
     const artist = this.getArtistById(artistId);
-    if(artist===undefined){
+    if(artist === undefined){
       throw new ArtistDoesNotExistError();
     }
     else {
@@ -206,8 +206,7 @@ class UNQfy {
   }
 
   getAlbums(id, albums) {
-    const newAlbums = albums.filter(a => a.id === id);
-    return newAlbums;
+    return albums.filter(album => album.getId() === id);
   }
 
   getPlaylistById(id) {
@@ -225,15 +224,16 @@ class UNQfy {
   getTracksMatchingGenres(genres) {
     const albumes = this._artists.flatMap(artist => artist.albums);
     const tracks = albumes.flatMap(album => album.tracks);
-    const trackInGenres = tracks.filter(t => t.genres.some(g => genres.includes(g)));
-    return trackInGenres;
+
+    return tracks.filter(t => t.genres.some(g => genres.includes(g)));
   }
 
   // artistName: nombre de artista(string)
   // retorna: los tracks interpredatos por el artista con nombre artistName
   getTracksMatchingArtist(artistName) {
     const artistNameValue = artistName.toLowerCase();
-    const artist = this._artists.filter(artist => artist.name.toLowerCase() === artistNameValue)[0];
+    
+    const artist = this._artists.filter(artist => artist.getName().toLowerCase() === artistNameValue)[0];
 
     if(artist === null || artist === undefined){
 
@@ -272,10 +272,11 @@ class UNQfy {
 
   searchByName(name) {
     const nameValue = name.toLowerCase();
-    const artists = this._artists.filter(artist => artist.name.toLowerCase().includes(nameValue));
-    const albums = this._artists.flatMap(artist => artist.albums.filter(album => album.name.toLowerCase().includes(nameValue)));
-    const tracks = this._artists.flatMap(artist => artist.albums.flatMap(album => album.tracks.filter(track => track.name.toLowerCase().includes(nameValue))));
-    const playlists = this.playlists.filter(playlist => playlist.name.toLowerCase().includes(nameValue));
+    const artists = this._artists.filter(artist => artist.getName().toLowerCase().includes(nameValue));
+    const albums = this._artists.flatMap(artist => artist.getAlbums().filter(album => album.getName().toLowerCase().includes(nameValue)));
+    const tracks = this._artists.flatMap(artist => artist.getAlbums().flatMap(album => album.getTracks().filter(track => track.getName().toLowerCase().includes(nameValue))));
+    const playlists = this.playlists.filter(playlist => playlist.getName().toLowerCase().includes(nameValue));
+    
     return { artists, albums, tracks, playlists };
   }
 
@@ -309,11 +310,11 @@ class UNQfy {
     const artist= this._artists.find(a=>a.albums.includes(this.getAlbumById(albumId)));
     const album = this.getAlbumById(albumId);
     
-    if(artist===undefined){
+    if(artist === undefined){
       throw new AlbumDoesNotExistError;
     } else{
-      this.deleteTracksFromPlaylists(album.tracks);//
-      this.deleteTracksFromUsers(album.tracks);///
+      this.deleteTracksFromPlaylists(album.getTracks());//
+      this.deleteTracksFromUsers(album.getTracks());///
       artist.removeAlbum(this.getAlbumById(albumId));
       return (`El álbum ha sido eliminado con éxito`);
     }
@@ -338,7 +339,7 @@ class UNQfy {
   }
 
   deletePlaylist(playlistId){
-    const playlist = this.playlists.find(p=>p.id===playlistId);
+    const playlist = this.playlists.find(p=>p.id === playlistId);
     
     if(playlist === undefined){
       throw new PlaylistDoesNotExistError; 
@@ -357,6 +358,7 @@ class UNQfy {
   playTrack(userId, trackId){//
     const user = this.getUserById(userId);
     const track = this.getTrackById(trackId);
+
     if(user === undefined){
       throw new UserDoesNotExistError;
     } else {
@@ -426,7 +428,7 @@ class UNQfy {
     orderedTracksById.forEach(t => {
 
       const track = this.getTrackById(t.trackId);
-      const trackToAdd = new Track(track.name, track.duration, track.genres, track.id);
+      const trackToAdd = new Track(track.getName(), track.getDuration(), track.getGenres(), track.getId());
       trackToAdd.timesPlayed = t.timesPlayed;
       result.push(trackToAdd);
 
@@ -482,7 +484,7 @@ class UNQfy {
   }
   async fillAlbumsForArtist(artistId) {
     const artist = this.getArtistById(artistId);
-    const albumsFromSpotify = await spotify.getAlbums(artist.name);
+    const albumsFromSpotify = await spotify.getAlbums(artist.getName());
 
     albumsFromSpotify.forEach(album =>this.addAlbum(artist.id, {name : album.name, year : album.release_date.substr(0,4)}));
     

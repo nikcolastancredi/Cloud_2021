@@ -3,35 +3,47 @@
 module.exports= class Track{
 
   constructor(name, duration,genres,id){
-    this._id= id;
-    this._name= name;
-    this._duration= duration;
-    this._genres= genres;
-    this._lyrics=null;
+    this.id = id;
+    this.name = name;
+    this.duration = duration;
+    this.genres = genres;
+    this.lyrics = null;
 
   }
 
-  get id(){
-    return this._id;
+  getId(){
+    return this.id;
   }
-  get name(){
-    return this._name;
-  }
-
-  get duration(){
-    return this._duration;
+  setId(id){
+    this.id = id;
   }
 
-  get genres(){
-    return this._genres;
+  getName(){
+    return this.name;
+  }
+
+  setName(name){
+    this.name = name;
+  }
+
+  getDuration(){
+    return this.duration;
+  }
+
+  setDuration(duration){
+    this.duration = duration;
+  }
+
+  getGenres(){
+    return this.genres;
   }
 
   setLyrics(lyrics){
-      this._lyrics = lyrics;
+      this.lyrics = lyrics;
   }
 
-    getLyrics() {
-    return this._lyrics;
+  getLyrics() {
+    return this._yrics;
    }
   
 

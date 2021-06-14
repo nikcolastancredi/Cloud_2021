@@ -8,13 +8,12 @@ const filename = 'data.json';
 
 //POST - agrega un album a un artista
 albums.post('/albums', (req, res, next) => {
-    api.checkValidInput(req.body, { artistId: 'number', name: 'string', year: 'number' }, res, next);
     const params = req.body;
-
     const albumParam = { name: params.name, year: params.year };
 
     let album = null;
     try {
+        api.checkValidInput(req.body, { artistId: 'number', name: 'string', year: 'number' }, res);
         album = req.unqfy.addAlbum(params.artistId, albumParam);
         req.unqfy.save(filename);
         res.status(201).json(album);
