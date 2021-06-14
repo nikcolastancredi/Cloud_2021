@@ -7,14 +7,15 @@ const filename = 'data.json';
 //-------------------------ALBUMS-------------------------//
 
 //POST - agrega un album a un artista
-albums.post('/albums', (req, res, next) => {
+albums.post('/albums', (req, res) => {
+    
     const params = req.body;
+
     const albumParam = { name: params.name, year: params.year };
 
-    let album = null;
     try {
         api.checkValidInput(req.body, { artistId: 'number', name: 'string', year: 'number' }, res);
-        album = req.unqfy.addAlbum(params.artistId, albumParam);
+        const album = req.unqfy.addAlbum(params.artistId, albumParam);
         req.unqfy.save(filename);
         res.status(201).json(album);
     } catch (error) {
@@ -84,17 +85,28 @@ albums.delete('/albums/:albumId', (req,res,next) => {
     }
 });
 
-// //actualiza el año de un album
-// albums.patch('/albums/:albumId', (req, res, next) => {
-//     const albumId = parseInt(req.params.albumId);
-//     const newYear = req.body.year;
+//actualiza el año de un album
+albums.patch('/albums/:albumId', (req, res) => {
 
-//     try{
-//         req.unqfy.updateAlbumYear(albumId,newYear);
-//     }catch (error){
-//         throw new albumDoesNotExistErrorApi();
-//     }
+    const albumId = parseInt(req.params.albumId);
+    const newYear = req.body.year;
 
-// });
+    try{
+        const albumSearch = req.unqfy.getAlbumById(albumId);
+        albumSearch.setYear(newYear);
+        req.unqfy.save(filename);
+        res.status(200).json(albumSearch);
+    }catch (error){
+
+        if(error.name === 'AlbumDoesNotExistError'){
+            const err = new APIError.ResourceNotFound();
+            res.status(err.status).json(err);
+        }else {
+            const err = new APIError.BadRequest();
+            res.status(err.status).json(err);
+        }   
+            }
+
+});
 
 module.exports = albums;

@@ -96,12 +96,13 @@ class UNQfy {
   /* Crea un album y lo agrega al artista con id artistId. El objeto album creado debe tener (al menos):
      - una propiedad name (string)
      - una propiedad year (number) */
-    const newAlbum = new Album (albumData.name, albumData.year, this.getUniqueId());
+    // const newAlbum = new Album (albumData.name, albumData.year, this.getUniqueId());
     const artist = this.getArtistById(artistId);
     if(artist === undefined){
       throw new ArtistDoesNotExistError();
     }
     else {
+      const newAlbum = new Album (albumData.name, albumData.year, this.getUniqueId());
       artist.addAlbum(newAlbum);
       return newAlbum;
     }
@@ -474,14 +475,8 @@ class UNQfy {
     }
   }
 
-  updateAlbumYear(id, year){
-    const albumEdit = this.getAlbumById(id);
-    if (albumEdit){
-      albumEdit.setYear(year);
-    }
-    throw new AlbumDoesNotExistError();
 
-  }
+
   async fillAlbumsForArtist(artistId) {
     const artist = this.getArtistById(artistId);
     const albumsFromSpotify = await spotify.getAlbums(artist.getName());
