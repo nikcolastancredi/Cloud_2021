@@ -12,7 +12,7 @@ const { Router } = require('express');
 
 const app = express();
 const artists = express();
-const albums = express();
+const albums = require('./albumsRoute');
 const filename = 'data.json';
 const playlists = require('./playlistsRoute');
 
@@ -196,82 +196,6 @@ app.get('/api/tracks/:trackId/lyrics',  (req, res, next) => {
 });
 
 
-//-------------------------ALBUMS-------------------------//
-
-//POST - agrega un album a un artista
-albums.post('/albums', (req, res, next) => {
-    checkValidInput(req.body, { artistId: 'number', name: 'string', year: 'number' }, res, next);
-    const params = req.body;
-
-    const albumParam = { name: params.name, year: params.year };
-
-    const existArtist = req.unqfy.getArtistById(params.artistId);
-    const existAlbum = req.unqfy.getAlbumByName(params.name);
-
-    if (!existArtist) {
-        throw next(new artistAlreadyExistsErrorApi());
-    }
-    else if (existAlbum) {
-        throw next(new albumAlreadyExistsErrorApi());
-    }
-
-    const newAlbum = req.unqfy.addAlbum(params.artistId, albumParam);
-    req.unqfy.save(filename);
-    res.status(201).json(newAlbum);
-});
-
-
-//GET - Obtiene un album a partir de un Id
-albums.get('/albums/:albumId', (req, res, next) => {
-    const albumId = parseInt(req.params.albumId);
-    const album = req.unqfy.getAlbumById(albumId);
-    if (!album) {
-        throw next(new albumDoesNotExistErrorApi());
-    }
-    res.status(200).json(album);
-});
-
-
-//GET - Busca albums a partir de param Name
-albums.get('/albums/', (req, res, next) => {
-    const name = req.query.name || '';
-    if(name){
-        const albums = req.unqfy.getAlbumByName(name);
-        res.status(200).json(albums);
-    }else{
-    const albums = req.unqfy.getAllAlbums();
-    res.status(200).json(albums);
-    }
-    
-});
-
-
-//DELETE - borra un album por id
-albums.delete('/albums/:albumId', (req,res,next) => {
-    const albumId = parseInt(req.params.artistId);
-    // const artist = req.unqfy.getArtistById(artistId);
-    try{
-        req.unqfy.deleteAlbum(albumId);
-        req.unqfy.save();
-        res.status(204).json();
-    }catch (error){
-        throw albumDoesNotExistErrorApi(); // poner el error correspondiente
-    }
-});
-
-//actualiza el año de un album
-albums.patch('/albums/:albumId', (req, res, next) => {
-    const albumId = parseInt(req.params.albumId);
-    const newYear = req.body.year;
-
-    try{
-        req.unqfy.updateAlbumYear(albumId,newYear);
-    }catch (error){
-        throw new albumDoesNotExistErrorApi();
-    }
-
-});
-
-
+exports.checkValidInput = checkValidInput;
 
 

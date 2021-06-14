@@ -180,7 +180,7 @@ class UNQfy {
 
   getAlbumByName(name){
     const all = this.searchByName(name);
-    return all.album;
+    return all.albums;
   }
 
   getArtistAlbum(id) {
