@@ -1,12 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const unq = require("../unqfy"); // importamos el modulo unqfy
-// const artistDoesNotExistsError = require ('../errores/ArtistDoesNotExistError');
-// const TrackDoesNotExistsError = require('../errores/TrackDoesNotExistsError');
-// const artistDoesNotExistsErrorApi = require ('./errorApi/ArtistDoesNotExistsErrorApi');
-// const artistAlreadyExistsErrorApi = require('./errorApi/ArtistAlreadyExistsErrorApi');
-// const albumAlreadyExistsErrorApi = require('./errorApi/AlbumAlreadyExistsErrorApi');
-// const albumDoesNotExistErrorApi = require('./errorApi/AlbumDoesNotExistErrorApi');
 const APIError = require('./APIError');
 const invalidInput = require('../errores/InvalidInputApiError');
 // const { Router } = require('express');
@@ -77,127 +71,7 @@ function errorHandler(err, req, res, next) {
       next(err); // continua con el manejador de errores por defecto
     }
  }
-
-
-
-
-//------------------------ARTISTAS------------------------//
-
-// //POST - agrega un nuevo artista
-// artists.post('/artists', (req, res, next) => {
-
-//     checkValidInput(req.body, { name: 'string', country: 'string' }, res, next);
-
-
-//     let artist = null;
-//     try {
-//         artist = req.unqfy.addArtist(req.body);
-//         req.unqfy.save(filename);
-//         res.status(201).json(artist);
-//     } catch (error) {
-//         if(error.name === 'ArtistExistsError'){
-//             const err = new APIError.ResourceAlreadyExist();
-//             res.status(err.status).json(err);
-//         }else {
-//             const err = new APIError.BadRequest();
-//             res.status(err.status).json(err);
-//         }   
-        
-//     }
-// });
-
-// //GET - obtiene un artista a partir de su ID
-// artists.get('/artists/:artistId', (req, res, next) => {
-//     // const artistId = parseInt(req.params.artistId);
-//     // const artist = req.unqfy.getArtistById(artistId);
-//     // if (!artist) {
-//     //     throw next(new artistDoesNotExistsErrorApi());
-//     // }
-//     // res.status(200).json(artist);
-
-//     const artistId = parseInt(req.params.artistId);
-//     let artist = null;
-//     try{
-//         artist = req.unqfy.getArtistById(artistId);
-//         res.json(artist);
-//     } catch(error){
-//         res.status(404).json( { status: 404, errorCode: 'RESOURCE_NOT_FOUND' });
-//         // throw next (new artistDoesNotExistsErrorApi().error());
-//     }
-
-    
-// });
-
-// artists.get('/artists', (req, res, next) => {
-//     const artist = req.unqfy.getArtists();
-//         res.status(200).json(artist);
-// });
-
-
-
-// //GET - busca artistas que matchean con param name
-// artists.get('/artists', (req, res, next) => {
-//     const name = req.query.name || '';
-//     if(name){
-//         const artist = req.unqfy.getArtistByName(name);
-//         res.status(200).json(artist);
-//     }else{
-//     const artist = req.unqfy.getArtists();
-//     res.status(200).json(artist);
-//     }
-    
-// });
-
-// //UPDATE - actualiza el artista
-// artists.put('/artists/:artistId', (req, res, next) => {
-//     const artistId = parseInt(req.params.artistId);
-//     checkValidInput(req.body, { name: 'string', country: 'string' }, res, next);
-//     let artist = null;
-//     try {
-//         artist = req.unqfy.updateArtist(artistId, req.body);
-//         req.unqfy.save(filename);
-//         res.status(200).json(artist);
-//     } catch (error) {
-//         throw next(artistDoesNotExistsErrorApi); // poner el error correspondiente
-//     }
-
-// });
-
-// //DELETE - borra artista
-// artists.delete('/artists/:artistId', (req,res,next) => {
-//     const artistId = parseInt(req.params.artistId);
-//     // const artist = req.unqfy.getArtistById(artistId);
-//     try{
-//         req.unqfy.deleteArtist(artistId);
-//         req.unqfy.save(filename);
-//         res.status(204).json();
-//     }catch (error){
-//         throw next(artistDoesNotExistsErrorApi); // poner el error correspondiente
-//     }
-// });
-
-//GET /api/tracks/:trackId/lyrics
-// app.get('/api/tracks/:trackId/lyrics',  (req, res, next) => {
-//     const trackId = parseInt(req.params.trackId);
-
-//     req.unqfy.getLyrics(trackId).then(data=>{
-        
-//         if(data.status_code!==200){
-//             res.status(data.status_code);
-//         }
-//         res.status(200).json(JSON.parse(data.message));
-//         })
-//         .catch(err=>{
-//             res.status(404);
-//             res.json({
-//                 msg: 'RESOURCE_NOT_FOUND',
-//                 error: err,
-//             });
-            
-//         });
-// });
-
-
+ 
 exports.checkValidInput = checkValidInput;
 
 
