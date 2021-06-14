@@ -2,10 +2,10 @@
 const picklify = require('picklify'); // para cargar/guardar unqfy
 const fs = require('fs'); // para cargar/guarfar unqfy
 
-const Artist = require('./Artist');
-const Album = require('./Album');
-const Track = require('./Track');
-const Playlist = require('./Playlist');
+const Artist = require('./artist');
+const Album = require('./album');
+const Track = require('./track');
+const Playlist = require('./playlist');
 const ArtistExistError= require('./errores/ArtistAlreadyExistsError');
 const ArtistDoesNotExistError=require('./errores/ArtistDoesNotExistError');
 const AlbumDoesNotExistError= require('./errores/AlbumDoesNotExistError');
@@ -13,7 +13,7 @@ const TrackDoesNotExistsError = require('./errores/TrackDoesNotExistsError');
 const UserAlreadyExistsError = require('./errores/UserAlreadyExistsError');
 const UserDoesNotExistError = require('./errores/UserDoesNotExistsError');
 const PlaylistDoesNotExistError = require('./errores/PlaylistDoesNotExistsError');
-const User = require('./User');
+const User = require('./user');
 const MusixMatchCliente =  require('./clientApi/MusixMatchCliente');
 const mmCliente = new MusixMatchCliente();
 const filename = 'data.json';
