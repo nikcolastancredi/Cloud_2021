@@ -61,17 +61,17 @@ function checkValidInput(data, expectedKeys, res, next) {
 
 
 function errorHandler(err, req, res, next) {
-    if (req.baseUrl!=='/api'){
-        res.status(err.status);
-     res.json({status: err.status, errorCode: "RESOURCE_NOT_FOUND"});
-       }
+
     console.error(err); // imprimimos el error en consola
    if (err.type === 'entity.parse.failed'){
       // body-parser error para JSON invalido
       res.status(err.status);
       res.json({status: err.status, errorCode:"BAD_REQUEST"});
     }
-    
+    //else if (req.baseUrl!=='/api'){
+    //    res.status(err.status);
+     //res.json({status: err.status, errorCode: "RESOURCE_NOT_FOUND"});
+    //   }
     else {
       next(err); // continua con el manejador de errores por defecto
     }
