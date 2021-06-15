@@ -31,10 +31,10 @@ class Command {
     };
   }
 
-  execute(params, unqFy) {
+  async execute(params, unqFy) {
     const cmd = params[0];
     if (cmd in this.commandList) {
-      this.commandList[cmd](params, unqFy);
+      await this.commandList[cmd](params, unqFy);
     } else {
       throw new CommandDoesNotExistsError(params[0]);
     }
@@ -248,10 +248,9 @@ class Command {
       throw new CommandIncompleteError(parameters[0], 1);
     }
   }
-  fillAlbumsForArtistFunction(parameters, unqfy){
+  async fillAlbumsForArtistFunction(parameters, unqfy){
       if (parameters.length >= 2) {
-        console.log(
-          unqfy.fillAlbumsForArtist(parseInt(parameters[1])));
+        console.log(await unqfy.fillAlbumsForArtist(parseInt(parameters[1])));
       } else {
         throw new CommandIncompleteError(parameters[0], 1);
       }

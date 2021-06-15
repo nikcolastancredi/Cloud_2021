@@ -45,13 +45,13 @@ function saveUNQfy(unqfy, filename = "data.json") {
 
 */
 
-function main() {
+async function main() {
   const command = new Command();
   const parameters = process.argv.slice(2); //los primeros dos arg estan reservados para main y node
   const unqfy = getUNQfy();
 
   try {
-    command.execute(parameters, unqfy);
+    await command.execute(parameters, unqfy);
     saveUNQfy(unqfy);
   } catch (error) {
     console.log(`${error.name}: ${error.message}` );

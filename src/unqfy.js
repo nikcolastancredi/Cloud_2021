@@ -511,11 +511,19 @@ class UNQfy {
     const artist = this.getArtistById(artistId);
     const albumsFromSpotify = await spotify.getAlbums(artist.getName());
 
-    albumsFromSpotify.forEach(album =>this.addAlbum(artist.id, {name : album.name, year : album.release_date.substr(0,4)}));
-    
+    albumsFromSpotify.forEach((album) => {
+      try {
+        this.addAlbum(artist.id, {
+          name: album.name,
+          year: album.release_date.substr(0, 4),
+        });
+      } catch (ignore) {
+        console.log("album duplicado");
+      }
+    });
+
     return albumsFromSpotify;
   }
-
 
   save(filename) {
     const serializedData = picklify.picklify(this);
