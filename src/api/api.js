@@ -34,6 +34,11 @@ const port = process.env.PORT || 8000;
 //     res.send(JSON.stringify({message: 'welcome to the api'}));
 // });
 
+app.use((req, res, next) => {
+  const error = new APIError.ResourceNotFound();
+  res.status(404).json(error);
+});
+
 app.listen(
     port,
     () => console.log('Running on port: ' + port)
