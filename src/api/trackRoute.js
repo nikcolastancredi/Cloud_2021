@@ -7,23 +7,27 @@ const track = express();
 
 track.get('/tracks/:trackId/lyrics',  (req, res) => {
     const trackId = parseInt(req.params.trackId);
-
     req.unqfy.getLyrics(trackId).then(resp=>{
+        const track = req.unqfy.getTrackById(trackId);
         if(resp.status_code===200){
-        res.status(200).json(resp.body);
+            const letra = {
+                Name: track.name,
+                lyrics: resp.body
+            };
+        res.status(200).json(letra);
         } else {
-            throw new Error("LyricsNotFound","LyricsNotFound");
+            throw new APIError.RelatedResourceNotFound();
         }
         })
         .catch(err=>{
             res.status(404);
             res.json({
-                msg: 'RESOURCE_NOT_FOUND',
-                error: err.message,
+                status: 404,
+                errorCode: 'RESOURCE_NOT_FOUND'
             });
 
         });
 });
 
 
-module.exports =  track;
+module.exports = track;

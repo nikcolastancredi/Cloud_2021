@@ -65,14 +65,12 @@ class UNQfy {
   }
   
   addUser(userData) {
-  /* Crea un artista y lo agrega a unqfy. El objeto artista creado debe soportar (al menos):
-    - una propiedad name (string)
-    - una propiedad country (string)*/
+  /* Crea un user y lo agrega a unqfy. El objeto user creado debe soportar
+  - una propiedad name (string)*/
  
     if(this.userExists(userData)){
       throw new UserAlreadyExistsError();
     }
-
     else{
       const newUser= new User(userData.name, this.getUniqueId());
       this.users.push(newUser);
