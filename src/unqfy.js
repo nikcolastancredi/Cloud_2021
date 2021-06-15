@@ -371,7 +371,7 @@ class UNQfy {
     const playlist = this.playlists.find(p=>p.id === playlistId);
     
     if(playlist === undefined){
-      throw new PlaylistDoesNotExistError; 
+      throw new PlaylistDoesNotExistError(); 
     } else{
       const index = this.playlists.indexOf(playlist);
        this.playlists.splice(index, 1);
