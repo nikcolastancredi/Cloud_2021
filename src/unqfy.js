@@ -154,6 +154,12 @@ class UNQfy {
     return all.artists;
   }
 
+  getUsersByName(name){
+    const nameValue = name.toLowerCase();
+    const users = this.users.filter(user => user.name.toLowerCase().includes(nameValue));
+    return users;
+  }
+
   updateArtist(id, data){
     const artistSearch = this.getArtistById(id);
     artistSearch.setName(data.name);
@@ -162,6 +168,15 @@ class UNQfy {
     this._artists.splice(index, 1,artistSearch);
 
     return (artistSearch);
+  }
+
+  updateUser(id, data){
+    const userSearch = this.getUserById(id);
+    userSearch.setName(data.name);
+    const index = this.users.findIndex(user => user.id === id);
+    this.users.splice(index, 1,userSearch);
+
+    return (userSearch);
   }
 
   getAlbumById(id) {
@@ -318,6 +333,19 @@ class UNQfy {
       return (`El álbum ha sido eliminado con éxito`);
     }
   }
+
+  deleteUser(id){
+    const user = this.getUserById(id);
+    
+    if(user){
+     const index = this.users.indexOf(user);
+     if (index > -1) {
+      this.users.splice(index, 1);
+    }else{
+      throw new UserDoesNotExistError;
+    }
+  }
+  }
   
 
   deleteTrack(trackId){
@@ -341,7 +369,7 @@ class UNQfy {
     const playlist = this.playlists.find(p=>p.id === playlistId);
     
     if(playlist === undefined){
-      throw new PlaylistDoesNotExistError; 
+      throw new PlaylistDoesNotExistError(); 
     } else{
       const index = this.playlists.indexOf(playlist);
        this.playlists.splice(index, 1);

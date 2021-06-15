@@ -16,6 +16,10 @@ module.exports= class User{
     return this._name;
   }
 
+  setName(name){
+    this._name = name;
+  }
+
   get playedTracks(){
     return this._playedTracks;
   }
@@ -79,13 +83,11 @@ module.exports= class User{
     if (index > -1) {
     this.playedTracks.splice(index, 1);
   }
-index = this._timesPlayed.findIndex(t=>t.trackId===trackId);
+  index = this._timesPlayed.findIndex(t=>t.trackId===trackId);
   if (index > -1) {
   this.timesPlayed.splice(index, 1);
   }
 
 }
   
-
-
 };

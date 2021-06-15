@@ -10,6 +10,7 @@ const artists = require('./artistsRoute');
 const albums = require('./albumsRoute');
 const playlists = require('./playlistsRoute');
 const tracks = require('./trackRoute');
+const users = require('./usersRoute');
 
 const unqfy = new unq.UNQfy();
 
@@ -23,7 +24,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());// Parsea el JSON y deja el resultado en req.body
 app.use(bodyParser.urlencoded({ extended:true }));
 app.use(errorHandler); // Registro de un manejador de errores
-app.use('/api', artists, albums, playlists,tracks) ;
+app.use('/api', artists, albums, playlists,tracks,users ) ;
 
 const port = process.env.PORT || 8000;
 
@@ -32,6 +33,11 @@ const port = process.env.PORT || 8000;
 //     res.status(201); //puedo cambiar el status code
 //     res.send(JSON.stringify({message: 'welcome to the api'}));
 // });
+
+app.use((req, res, next) => {
+  const error = new APIError.ResourceNotFound();
+  res.status(404).json(error);
+});
 
 app.listen(
     port,
