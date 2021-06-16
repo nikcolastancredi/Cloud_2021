@@ -223,6 +223,10 @@ class UNQfy {
     return albums.filter(album => album.getId() === id);
   }
 
+  getPlaylists() {
+    return this.playlists;
+  }
+
   getPlaylistById(id) {
     const playlist = this.playlists.filter(p => p.id === id);
     if (playlist.length === 0) {
