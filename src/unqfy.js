@@ -282,6 +282,20 @@ class UNQfy {
       this.addPlaylist(newPlaylist);
       return newPlaylist;
   }
+  createPlaylistWithTracks(name, tracks) {
+  
+    const fetchedTracks = [];
+    tracks.forEach((tId) => {
+      fetchedTracks.push(this.getTrackById(parseInt(tId)));
+    });
+    const idPlaylist = this.getUniqueId();
+    const newPlaylist = new Playlist();
+	newPlaylist.setName(name);
+	newPlaylist.setId(idPlaylist);
+	newPlaylist.setTracks(fetchedTracks);
+    this.addPlaylist(newPlaylist);
+    return newPlaylist;
+  }
 
   addPlaylist(newPlaylist) {
     this.playlists.push(newPlaylist);

@@ -2,21 +2,46 @@ const express = require('express');
 const playlists = express();
 const filename = 'data.json';
 const APIError = require('./APIError');
-
+const api = require('./api');
 
 playlists.post('/playlists', (req, res) => {
     
-    try{       
-        const newPlaylist = req.unqfy.createPlaylist(req.body.name, req.body.genres, req.body.maxDuration);
+    if (req.body.tracks === undefined){
+        try{       
+            api.checkValidInput(req.body, { name: 'string', genres: 'object', maxDuration: 'number' }, res);
+            const newPlaylist = req.unqfy.createPlaylist(req.body.name, req.body.genres, req.body.maxDuration);
 
-        req.unqfy.save(filename);
-        res.status(201).json(newPlaylist);
-    }catch(e){
-            res.status(400);
-            res.json({errorCode : 'ERROR', errorMessage : e.message});
+            req.unqfy.save(filename);
+            res.status(201).json(newPlaylist);
+        }catch(error){
+            if(error.name === 'TrackDoesNotExistsError'){
+                const err = new APIError.ResourceNotFound();
+                res.status(err.status).json(err);
+            }else {
+                const err = new APIError.BadRequest();
+                res.status(err.status).json(err);
+            }   
         }
+    } else {
+        api.checkValidInput(req.body, { name: 'string', tracks: 'object' }, res);
+
+        try{       
+            const newPlaylist = req.unqfy.createPlaylistWithTracks(req.body.name, req.body.tracks);
+    
+            req.unqfy.save(filename);
+            res.status(201).json(newPlaylist);
+        }catch(error){
+            if(error.name === 'TrackDoesNotExistsError'){
+                const err = new APIError.ResourceNotFound();
+                res.status(err.status).json(err);
+            }else {
+                const err = new APIError.BadRequest();
+                res.status(err.status).json(err);
+            }   
+        }
+
     }
-);
+});
 
 playlists.get('/playlists/:playlistId', (req, res) => {
 
