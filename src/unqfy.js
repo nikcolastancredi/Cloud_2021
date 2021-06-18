@@ -207,15 +207,12 @@ class UNQfy {
   }
 
   getTrackById(id) {
-    const track = this._artists
-      .flatMap((artist) => artist.albums)
-      .flatMap((album) => album.tracks)
-      .find((t) => t.id === id);
+    const track = this._artists.flatMap(artist => artist.getAlbums().flatMap(album => album.getTracks().find(track => track.getId()=== id)));
 
-    if (track === undefined) {
+    if (track[0] === undefined) {
       throw new TrackDoesNotExistsError();
     } else {
-      return track;
+      return track[0];
     }
   }
 
@@ -403,12 +400,7 @@ class UNQfy {
   playTrack(userId, trackId){//
     const user = this.getUserById(userId);
     const track = this.getTrackById(trackId);
-
-    if(user === undefined){
-      throw new UserDoesNotExistError;
-    } else {
-      this.userPlayTrack(user,track);
-    }
+	this.userPlayTrack(user,track);
   }
 
   getUserById(id) {

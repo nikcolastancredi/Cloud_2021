@@ -8,27 +8,25 @@ const filename = 'data.json';
 
 
 //POST - agrega un nuevo usuario
-users.post('/users', (req, res) => {    
+users.post('/users', (req, res, next) => {    
     
     try {
-        api.checkValidInput(req.body, { name: 'string' }, res);
+        api.checkValidInput(req.body, { name: 'string' });
         const newUser = req.unqfy.addUser(req.body);
         req.unqfy.save(filename);
         res.status(201).json(newUser);
     } catch (error) {
         if(error.name === 'UserAlreadyExistsError'){
-            const err = new APIError.ResourceAlreadyExist();
-            res.status(err.status).json(err);
+            next(new APIError.ResourceAlreadyExist());
         }else {
-            const err = new APIError.BadRequest();
-            res.status(err.status).json(err);
+            next(error);
         }   
         
     }
 });
 
 //POST : Agregar un track a la lista de escuchados de un usuario
-users.post('/users/listenings', (req, res) => {
+users.post('/users/listenings', (req, res, next) => {
 
     try {
         api.checkValidInput(req.body, { userId: 'string', trackId: 'string' }, res);
@@ -39,12 +37,10 @@ users.post('/users/listenings', (req, res) => {
         req.unqfy.save(filename);
         res.status(201).json(user);
     } catch (error) {
-        if(error.name === 'UserDoesNotExistError' || error.name === 'TrackDoesNotExistsError'){
-            const err = new APIError.ResourceNotFound();
-            res.status(err.status).json(err);
+        if(error.name === 'UserDoesNotExistsError' || error.name === 'TrackDoesNotExistsError'){
+            next(new APIError.ResourceNotFound());
         }else {
-            const err = new APIError.BadRequest();
-            res.status(err.status).json(err);
+            next(error);
         }
 
     }
@@ -52,7 +48,7 @@ users.post('/users/listenings', (req, res) => {
 
 
 //GET - obtiene un usuario a partir de su ID
-users.get('/users/:userId', (req, res) => {
+users.get('/users/:userId', (req, res, next) => {
     const userId = parseInt(req.params.userId);
     try{
         const userSearch = req.unqfy.getUserById(userId);
@@ -60,17 +56,15 @@ users.get('/users/:userId', (req, res) => {
     } catch(error){
 
         if(error.name === 'UserDoesNotExistsError'){
-            const err = new APIError.ResourceNotFound();
-            res.status(err.status).json(err);
+            next(new APIError.ResourceNotFound());
         }else {
-            const err = new APIError.BadRequest();
-            res.status(err.status).json(err);
+            next(error);
         }
     }
 });
 
 //GET - busca usuarios que matchean con param name
-users.get('/users', (req, res) => {
+users.get('/users', (req, res, next) => {
     const name = req.query.name || '';
     if(name){
         try{
@@ -80,12 +74,10 @@ users.get('/users', (req, res) => {
 
         }catch(error){
                 
-            if(error.name === 'UserDoesNotExistsError'){// si no matchea tiramos error?
-                const err = new APIError.ResourceNotFound();
-                res.status(err.status).json(err);
+            if(error.name === 'UserDoesNotExistsError'){
+               next(new APIError.ResourceNotFound());
             }else {
-                const err = new APIError.BadRequest();
-                res.status(err.status).json(err);
+                next(error);
             }
         }
         
@@ -97,12 +89,12 @@ users.get('/users', (req, res) => {
     
 });
 
-//UPDATE - actualiza el user
-users.put('/users/:usersId', (req, res) => {
+//UPDATE - actualiza el artista
+users.put('/users/:usersId', (req, res, next) => {
     const usersId = parseInt(req.params.usersId);
     
     try {
-        api.checkValidInput(req.body, { name: 'string' }, res);
+        api.checkValidInput(req.body, { name: 'string' });
         const newUser = req.unqfy.updateUser(usersId, req.body);
         req.unqfy.save(filename);
         res.status(200).json(newUser);
@@ -110,11 +102,9 @@ users.put('/users/:usersId', (req, res) => {
     } catch (error) {
 
         if(error.name === 'UserDoesNotExistsError'){
-            const err = new APIError.ResourceNotFound();
-            res.status(err.status).json(err);
+            next(new APIError.ResourceNotFound());
         }else {
-            const err = new APIError.BadRequest();
-            res.status(err.status).json(err);
+            next(error);
         }    
 
     }
@@ -122,7 +112,7 @@ users.put('/users/:usersId', (req, res) => {
 });
 
 //DELETE - borra un usuario
-users.delete('/users/:userId', (req,res) => {
+users.delete('/users/:userId', (req,res, next) => {
     const userId = parseInt(req.params.userId);
     
     try{
@@ -134,12 +124,10 @@ users.delete('/users/:userId', (req,res) => {
     } catch (error){
 
         if(error.name === 'UserDoesNotExistsError'){
-            const err = new APIError.ResourceNotFound();
-            res.status(err.status).json(err);
+            next(new APIError.ResourceNotFound());
         }else {
-            const err = new APIError.BadRequest();
-            res.status(err.status).json(err);
-        }
+            next(error);
+        }    
     }
 });
 
