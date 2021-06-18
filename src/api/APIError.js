@@ -1,5 +1,5 @@
 // Error personalizado
-class APIError extends Error {
+class APIErrorAbstract extends Error {
     constructor(statusCode, errorCode, message = null) {
       super(message);
       this.status = statusCode;
@@ -7,35 +7,35 @@ class APIError extends Error {
     }
  }
  
- class InvalidInputError extends APIError {
+ class InvalidInputError extends APIErrorAbstract {
     constructor() {
       super(400, 'INVALID_INPUT_DATA');
     }  
  }
  
- class RelatedResourceNotFound extends APIError {
+ class RelatedResourceNotFound extends APIErrorAbstract {
     constructor() {
       super( 404, 'RELATED_RESOURCE_NOT_FOUND');
     }  
 }
 
-    class ResourceNotFound extends APIError {
+    class ResourceNotFound extends APIErrorAbstract {
         constructor() {
           super(404, 'RESOURCE_NOT_FOUND');
         }  
     
  }
 
- class BadRequest extends APIError {
+ class BadRequest extends APIErrorAbstract {
     constructor() {
       super(400, 'BAD_REQUEST');
     }  
 }
 
-class ResourceAlreadyExist extends APIError {
+class ResourceAlreadyExist extends APIErrorAbstract {
   constructor() {
     super(409, 'RESOURCE_ALREADY_EXISTS');
   }  
 }
 
- module.exports = {InvalidInputError, RelatedResourceNotFound, ResourceNotFound,BadRequest, ResourceAlreadyExist};
+ module.exports = {APIErrorAbstract, InvalidInputError, RelatedResourceNotFound, ResourceNotFound,BadRequest, ResourceAlreadyExist};
