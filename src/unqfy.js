@@ -223,6 +223,10 @@ class UNQfy {
     return albums.filter(album => album.getId() === id);
   }
 
+  getPlaylists() {
+    return this.playlists;
+  }
+
   getPlaylistById(id) {
     const playlist = this.playlists.filter(p => p.id === id);
     if (playlist.length === 0) {
@@ -277,6 +281,20 @@ class UNQfy {
       newPlaylist.generateListByTracks(tracksInGenres, maxDuration);
       this.addPlaylist(newPlaylist);
       return newPlaylist;
+  }
+  createPlaylistWithTracks(name, tracks) {
+  
+    const fetchedTracks = [];
+    tracks.forEach((tId) => {
+      fetchedTracks.push(this.getTrackById(parseInt(tId)));
+    });
+    const idPlaylist = this.getUniqueId();
+    const newPlaylist = new Playlist();
+	newPlaylist.setName(name);
+	newPlaylist.setId(idPlaylist);
+	newPlaylist.setTracks(fetchedTracks);
+    this.addPlaylist(newPlaylist);
+    return newPlaylist;
   }
 
   addPlaylist(newPlaylist) {
