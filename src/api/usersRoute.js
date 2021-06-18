@@ -27,24 +27,28 @@ users.post('/users', (req, res) => {
     }
 });
 
-// users.post('/users/:userId/listenings', (req, res) => {    
-    
-//     try {
-//         api.checkValidInput(req.body, { name: 'string', country: 'string' }, res);
-//         const newArtist = req.unqfy.addArtist(req.body);
-//         req.unqfy.save(filename);
-//         res.status(201).json(newArtist);
-//     } catch (error) {
-//         if(error.name === 'ArtistExistsError'){
-//             const err = new APIError.ResourceAlreadyExist();
-//             res.status(err.status).json(err);
-//         }else {
-//             const err = new APIError.BadRequest();
-//             res.status(err.status).json(err);
-//         }   
-        
-//     }
-// });
+//POST : Agregar un track a la lista de escuchados de un usuario
+users.post('/users/listenings', (req, res) => {
+
+    try {
+        api.checkValidInput(req.body, { userId: 'string', trackId: 'string' }, res);
+        const iDUser = parseInt(req.body.userId);
+        const iDTrack = parseInt (req.body.trackId); 
+        req.unqfy.playTrack(iDUser, iDTrack);
+        const user = req.unqfy.getUserById(iDUser);
+        req.unqfy.save(filename);
+        res.status(201).json(user);
+    } catch (error) {
+        if(error.name === 'UserDoesNotExistError' || error.name === 'TrackDoesNotExistsError'){
+            const err = new APIError.ResourceNotFound();
+            res.status(err.status).json(err);
+        }else {
+            const err = new APIError.BadRequest();
+            res.status(err.status).json(err);
+        }
+
+    }
+});
 
 
 //GET - obtiene un usuario a partir de su ID
