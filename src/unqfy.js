@@ -493,7 +493,6 @@ class UNQfy {
     if( track.getLyrics() === null ){
      const data = await mmCliente.getLyrics(track);
      track.setLyrics(data.body);
-     this.save(filename);
       return data;
     }
     else {
@@ -502,7 +501,6 @@ class UNQfy {
         body:track.getLyrics()};
     }
   }
-
 
 
   async fillAlbumsForArtist(artistId) {
