@@ -12,17 +12,15 @@ const filename = 'data.json';
 artists.post('/artists', (req, res, next) => {    
     
     try {
-        api.checkValidInput(req.body, { name: 'string', country: 'string' }, res);
+        api.checkValidInput(req.body, { name: 'string', country: 'string' });
         const newArtist = req.unqfy.addArtist(req.body);
         req.unqfy.save(filename);
         res.status(201).json(newArtist);
     } catch (error) {
         if(error.name === 'ArtistExistsError'){
-            const err = new APIError.ResourceAlreadyExist();
-            res.status(err.status).json(err);
+           next(new APIError.ResourceAlreadyExist());
         }else {
-            const err = new APIError.BadRequest();
-            res.status(err.status).json(err);
+            next(error);
         }   
         
     }
@@ -38,11 +36,9 @@ artists.get('/artists/:artistId', (req, res, next) => {
     } catch(error){
 
         if(error.name === 'ArtistDoesNotExistsError'){
-            const err = new APIError.ResourceNotFound();
-            res.status(err.status).json(err);
+            next(new APIError.ResourceNotFound());
         }else {
-            const err = new APIError.BadRequest();
-            res.status(err.status).json(err);
+            next(error);
         }
     }
 
@@ -61,11 +57,9 @@ artists.get('/artists', (req, res, next) => {
         }catch(error){
                 
             if(error.name === 'ArtistDoesNotExistsError'){
-                const err = new APIError.ResourceNotFound();
-                res.status(err.status).json(err);
+               next(new APIError.ResourceNotFound());
             }else {
-                const err = new APIError.BadRequest();
-                res.status(err.status).json(err);
+                next(error);
             }
         }
         
@@ -82,7 +76,7 @@ artists.put('/artists/:artistId', (req, res, next) => {
     const artistId = parseInt(req.params.artistId);
     
     try {
-        api.checkValidInput(req.body, { name: 'string', country: 'string' }, res);
+        api.checkValidInput(req.body, { name: 'string', country: 'string' });
         const artist = req.unqfy.updateArtist(artistId, req.body);
         req.unqfy.save(filename);
         res.status(200).json(artist);
@@ -90,11 +84,9 @@ artists.put('/artists/:artistId', (req, res, next) => {
     } catch (error) {
 
         if(error.name === 'ArtistDoesNotExistsError'){
-            const err = new APIError.ResourceNotFound();
-            res.status(err.status).json(err);
+            next(new APIError.ResourceNotFound());
         }else {
-            const err = new APIError.BadRequest();
-            res.status(err.status).json(err);
+            next(error);
         }    
 
     }
@@ -102,7 +94,7 @@ artists.put('/artists/:artistId', (req, res, next) => {
 });
 
 //DELETE - borra artista
-artists.delete('/artists/:artistId', (req,res,next) => {
+artists.delete('/artists/:artistId', (req, res, next) => {
     const artistId = parseInt(req.params.artistId);
     
     try{
@@ -114,11 +106,9 @@ artists.delete('/artists/:artistId', (req,res,next) => {
     }catch (error){
 
         if(error.name === 'ArtistDoesNotExistsError'){
-            const err = new APIError.ResourceNotFound();
-            res.status(err.status).json(err);
+            next(new APIError.ResourceNotFound());
         }else {
-            const err = new APIError.BadRequest();
-            res.status(err.status).json(err);
+            next(error);
         }
     }
 });

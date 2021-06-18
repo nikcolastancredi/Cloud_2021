@@ -28,23 +28,14 @@ app.use('/api', artists, albums, playlists,tracks,users ) ;
 
 const port = process.env.PORT || 8000;
 
-
-// router.get('/api' , (req,res) => {
-//     res.status(201); //puedo cambiar el status code
-//     res.send(JSON.stringify({message: 'welcome to the api'}));
-// });
-
 app.use((req, res, next) => {
     next(new APIError.ResourceNotFound());
 });
 
-
 app.use(errorHandler); // Registro de un manejador de errores
 
-
-app.listen(
-    port,
-    () => console.log('Running on port: ' + port)
+app.listen(port, () => 
+  console.log('Running on port: ' + port)
 );
 
 
@@ -57,9 +48,9 @@ function valid(data, expectedKeys) {
 
 }
 
-function checkValidInput(data, expectedKeys, res, next) {
+function checkValidInput(data, expectedKeys) {
   if (!valid(data, expectedKeys)) {
-        next(new APIError.BadRequest());
+    throw new APIError.BadRequest();
   }
 }
 
