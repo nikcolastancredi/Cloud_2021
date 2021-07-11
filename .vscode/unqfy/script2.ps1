@@ -1,5 +1,5 @@
-Set-Location 'C:\Users\Camila\Desktop\Cloud_2021-1'
-Remove-Item 'C:\Users\Camila\Desktop\Cloud_2021-1\data.json'
+Set-Location 'C:\Users\Nikco\Documents\Unqui\Cloud\Cloud_2021'
+Remove-Item 'C:\Users\Nikco\Documents\Unqui\Cloud\Cloud_2021\data.json'
 
 node main.js addArtist 'Muse' 'Unintended' #id 1
 

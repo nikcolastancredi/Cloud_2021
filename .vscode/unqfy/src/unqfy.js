@@ -19,16 +19,22 @@ const mmCliente = new MusixMatchCliente();
 const filename = 'data.json';
 const spotifyClient = require('./clientApi/spotifyClient');
 const spotify = new spotifyClient.SpotifyClient();
+const Observable = require('./observer/Observable');
+const ObserverNewletter = require('./observer/NewletterObserver');
+const ObserverLogging = require('./observer/LoggingObserver');
 
 
 
 
-class UNQfy {
+class UNQfy extends Observable{
   constructor(){
+    super();
     this._artists = [];
     this.playlists = [];
     this.users = [];
     this.uniqueId = 0;
+    this.addSubscribe(new ObserverNewletter());
+    this.addSubscribe(new ObserverLogging());
  
   }
 
