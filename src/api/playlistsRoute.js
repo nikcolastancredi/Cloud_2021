@@ -60,7 +60,7 @@ playlists.delete('/playlists/:playlistId', (req, res, next) => {
     } catch (error) {
         if(error.name === 'PlaylistDoesNotExistsError'){
             next(new APIError.ResourceNotFound());
-        }else {
+        } else {
             next(error);
         }
     }

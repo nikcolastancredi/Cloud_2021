@@ -19,12 +19,14 @@ const mmCliente = new MusixMatchCliente();
 const filename = 'data.json';
 const spotifyClient = require('./clientApi/spotifyClient');
 const spotify = new spotifyClient.SpotifyClient();
+const Subject = require('./subject');
 
 
 
-
-class UNQfy {
+class UNQfy extends Subject {
+ 
   constructor(){
+    super();
     this._artists = [];
     this.playlists = [];
     this.users = [];
@@ -102,6 +104,7 @@ class UNQfy {
     else {
       const newAlbum = new Album (albumData.name, albumData.year, this.getUniqueId());
       artist.addAlbum(newAlbum);
+      this.change(newAlbum, artist); // avisa de su cambio
       return newAlbum;
     }
   }
