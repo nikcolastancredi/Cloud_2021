@@ -2,3 +2,6 @@ node_modules
 data.json
 visado_1
 script.ps1
+
+src/gmail-tools
+spotifyCreds.json

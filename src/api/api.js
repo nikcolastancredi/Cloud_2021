@@ -12,6 +12,7 @@ const albums = require('./albumsRoute');
 const playlists = require('./playlistsRoute');
 const tracks = require('./trackRoute');
 const users = require('./usersRoute');
+const newsletter = require('./newsletterRoute');
 
 const unqfy = new unq.UNQfy();
 
@@ -24,7 +25,7 @@ app.use((req, res, next) => {
 //middleware que parsea los body de los request y agrega el atributo body al request con el json parseado
 app.use(bodyParser.json());// Parsea el JSON y deja el resultado en req.body
 app.use(bodyParser.urlencoded({ extended:true }));
-app.use('/api', artists, albums, playlists,tracks,users ) ;
+app.use('/api', artists, albums, playlists,tracks,users,newsletter ) ;
 
 const port = process.env.PORT || 8000;
 
