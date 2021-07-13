@@ -19,18 +19,20 @@ const mmCliente = new MusixMatchCliente();
 const filename = 'data.json';
 const spotifyClient = require('./clientApi/spotifyClient');
 const spotify = new spotifyClient.SpotifyClient();
-const Subject = require('./subject');
+const EventManager = require('./observer/EventManager');
+const LogObserver = require('./observer/LogObserver');
 
 
 
-class UNQfy extends Subject {
+class UNQfy {
  
   constructor(){
-    super();
+    this.eventManager = new EventManager();
     this._artists = [];
     this.playlists = [];
     this.users = [];
     this.uniqueId = 0;
+    this.eventManager.subscribe('addArtist', new LogObserver());
  
   }
 
@@ -55,6 +57,7 @@ class UNQfy extends Subject {
     else{
       const newArtist= new Artist(artistData.name, artistData.country, this.getUniqueId());
       this._artists.push(newArtist);
+      this.eventManager.notify(this.addArtist.name, newArtist);
       return newArtist;
 
     }
@@ -543,7 +546,7 @@ class UNQfy extends Subject {
   static load(filename) {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
     //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy, Artist, Track, Playlist, User, Album];
+    const classes = [UNQfy, Artist, Track, Playlist, User, Album, EventManager, LogObserver];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 
