@@ -107,7 +107,7 @@ class UNQfy {
     else {
       const newAlbum = new Album (albumData.name, albumData.year, this.getUniqueId());
       artist.addAlbum(newAlbum);
-      this.change(newAlbum, artist); // avisa de su cambio
+      //this.change(newAlbum, artist);  TODO: CONSULTAR COMO MANEJAR LAS SUSCRIPCIONES DE OTRO TIPO
       return newAlbum;
     }
   }

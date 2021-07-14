@@ -1,10 +1,9 @@
 const express = require('express');
 const newsletter = express();
-const APIError = require('./APIError');
-const api = require('./api');
-const fs  = require('fs');
+//const APIError = require('../../unqfy/src/api/APIError');  TODO CAMBIAR MANEJO  DE ERRORES
+//const api = require('../../unqfy/src/api/api');
 
-const subsContainer = require('../subscriptionsContainer');
+const subsContainer = require('./subscriptionsContainer');
 
 
 
