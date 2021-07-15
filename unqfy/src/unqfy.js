@@ -21,6 +21,7 @@ const spotifyClient = require('./clientApi/spotifyClient');
 const spotify = new spotifyClient.SpotifyClient();
 const EventManager = require('./observer/EventManager');
 const LogObserver = require('./observer/LogObserver');
+const NewsletterObserver = require('./observer/NewsletterObserver');
 
 
 
@@ -33,6 +34,7 @@ class UNQfy {
     this.users = [];
     this.uniqueId = 0;
     this.eventManager.subscribe('addArtist', new LogObserver());
+    this.eventManager.subscribe('addAlbum', new NewsletterObserver());
  
   }
 
@@ -107,6 +109,8 @@ class UNQfy {
     else {
       const newAlbum = new Album (albumData.name, albumData.year, this.getUniqueId());
       artist.addAlbum(newAlbum);
+      this.eventManager.notify(this.addAlbum.name, newAlbum, artist);
+
       //this.change(newAlbum, artist);  TODO: CONSULTAR COMO MANEJAR LAS SUSCRIPCIONES DE OTRO TIPO
       return newAlbum;
     }
@@ -546,7 +550,7 @@ class UNQfy {
   static load(filename) {
     const serializedData = fs.readFileSync(filename, {encoding: 'utf-8'});
     //COMPLETAR POR EL ALUMNO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy, Artist, Track, Playlist, User, Album, EventManager, LogObserver];
+    const classes = [UNQfy, Artist, Track, Playlist, User, Album, EventManager, LogObserver, NewsletterObserver];
     return picklify.unpicklify(JSON.parse(serializedData), classes);
   }
 

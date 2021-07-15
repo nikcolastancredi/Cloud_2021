@@ -12,8 +12,8 @@ module.exports = class EventManager {
         this.listeners[eventType].push(listener);
     }
 
-    notify(eventType, data) {
-        this.listeners[eventType].forEach(observer => observer.update(data));
+    notify(eventType, ...data) {
+        this.listeners[eventType].forEach(observer => observer.update(eventType, data));
     }
 }
 
