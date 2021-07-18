@@ -7,3 +7,4 @@ script.ps1
 src/gmail-tools
 spotifyCreds.json
 /.env
+/logs.txt
