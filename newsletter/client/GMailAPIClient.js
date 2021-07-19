@@ -4,7 +4,7 @@ const {google} = require('googleapis');
 
 class GMailAPIClient {
 
-    constructor(credentials_path='./gmail-tools/credentials.json', token_path='./gmail-tools/token.json ') {
+    constructor(credentials_path= 'client/credentials.json', token_path='client/token.json') {
         if (!fs.existsSync(credentials_path)) {
             throw new Error(`Credentials file not found: ${credentials_path}`);
         }

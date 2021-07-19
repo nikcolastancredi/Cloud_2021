@@ -3,16 +3,13 @@ const bodyParser = require('body-parser');
 const unq = require("../unqfy"); // importamos el modulo unqfy
 const APIError = require('./APIError');
 const errorHandler = require('./handleErrors');
-
-// const { Router } = require('express');
-
-const app = express();
 const artists = require('./artistsRoute');
 const albums = require('./albumsRoute');
 const playlists = require('./playlistsRoute');
 const tracks = require('./trackRoute');
 const users = require('./usersRoute');
 
+const app = express();
 const unqfy = new unq.UNQfy();
 
 
@@ -24,6 +21,7 @@ app.use((req, res, next) => {
 //middleware que parsea los body de los request y agrega el atributo body al request con el json parseado
 app.use(bodyParser.json());// Parsea el JSON y deja el resultado en req.body
 app.use(bodyParser.urlencoded({ extended:true }));
+app.use(express.json());
 app.use('/api', artists, albums, playlists,tracks,users ) ;
 
 const port = process.env.PORT || 8000;
