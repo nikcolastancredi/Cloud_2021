@@ -28,14 +28,26 @@ const NewsletterObserver = require('./observer/NewsletterObserver');
 class UNQfy {
  
   constructor(){
-    this.eventManager = new EventManager();
     this._artists = [];
     this.playlists = [];
     this.users = [];
     this.uniqueId = 0;
-    this.eventManager.subscribe('addArtist', new LogObserver());
-    this.eventManager.subscribe('addAlbum', new NewsletterObserver());
+    this.eventManager = new EventManager();
+    this.addEventListeners();
  
+  }
+
+  addEventListeners(){
+
+    const logObserver = new LogObserver();
+    const newsletterObserver = new NewsletterObserver();
+    this.eventManager.subscribe('addArtist', logObserver);
+    this.eventManager.subscribe('addAlbum', logObserver);
+    this.eventManager.subscribe('addTrack', logObserver);
+    this.eventManager.subscribe('deleteAlbum', logObserver);
+    this.eventManager.subscribe('deleteTrack', logObserver);
+    this.eventManager.subscribe('deleteArtist', logObserver);
+    this.eventManager.subscribe('addAlbum', newsletterObserver);
   }
 
   getUniqueId() {
@@ -53,6 +65,7 @@ class UNQfy {
     - una propiedad country (string)*/
  
     if(this.artistExists(artistData)){
+      this.eventManager.notify(this.addArtist.name, new ArtistExistError() , artistData);
       throw new ArtistExistError;
     }
 
@@ -104,14 +117,13 @@ class UNQfy {
     // const newAlbum = new Album (albumData.name, albumData.year, this.getUniqueId());
     const artist = this.getArtistById(artistId);
     if(artist === undefined){
+      this.eventManager.notify(this.addAlbum.name, new ArtistDoesNotExistError() , artistId, albumData);
       throw new ArtistDoesNotExistError();
     }
     else {
       const newAlbum = new Album (albumData.name, albumData.year, this.getUniqueId());
       artist.addAlbum(newAlbum);
       this.eventManager.notify(this.addAlbum.name, newAlbum, artist);
-
-      //this.change(newAlbum, artist);  TODO: CONSULTAR COMO MANEJAR LAS SUSCRIPCIONES DE OTRO TIPO
       return newAlbum;
     }
   }
@@ -134,10 +146,12 @@ class UNQfy {
     const album =  this.getAlbumById(albumId);
 
     if(album === undefined){
+      this.eventManager.notify(this.addTrack.name, new AlbumDoesNotExistError() , newTrack, albumId);
       throw new AlbumDoesNotExistError();
     }
     else{
       album.addTrack(newTrack);
+      this.eventManager.notify(this.addTrack.name, newTrack);
       return newTrack;
     }
   }
@@ -330,7 +344,9 @@ class UNQfy {
      const index = this._artists.indexOf(artista);
      if (index > -1) {
       this._artists.splice(index, 1);
+      this.eventManager.notify(this.deleteArtist.name, artista);
     }else{
+      this.eventManager.notify(this.deleteArtist.name, new ArtistDoesNotExistError() , artistId);
       throw new ArtistDoesNotExistError;
     }
   }
@@ -350,11 +366,13 @@ class UNQfy {
     const album = this.getAlbumById(albumId);
     
     if(artist === undefined){
+      this.eventManager.notify(this.deleteAlbum.name, new AlbumDoesNotExistError() , albumId);
       throw new AlbumDoesNotExistError;
     } else{
       this.deleteTracksFromPlaylists(album.getTracks());//
       this.deleteTracksFromUsers(album.getTracks());///
       artist.removeAlbum(this.getAlbumById(albumId));
+      this.eventManager.notify(this.deleteAlbum.name, album);
       return (`El álbum ha sido eliminado con éxito`);
     }
   }
@@ -384,8 +402,10 @@ class UNQfy {
       eliminado = artist.removeTrackFromAlbum(this.getTrackById(trackId))[0];//
       this.deleteTracksFromUsers([eliminado]);
       if(playlists.length > 0){
-       playlists.forEach(p=> p.removeTrack(trackId)); 
-        }
+        playlists.forEach(p=> p.removeTrack(trackId)); 
+      }
+      this.eventManager.notify(this.deleteTrack.name, eliminado);
+
       console.log(`Track '${eliminado.name}' id:${eliminado.id} eliminado con éxito!`);
     }    
   }
