@@ -1,4 +1,6 @@
 const EventListener = require('./EventListener');
+const NewsletterClient = require('../clientApi/NewsletterClient');
+const newsClient = new NewsletterClient();
 
 class NewsletterObserver extends EventListener {
 
@@ -11,6 +13,7 @@ class NewsletterObserver extends EventListener {
         console.log(data[0]);
         console.log(data[1]);
         //llamado a la API de Newsletter //POST /api/notify
+        newsClient.notify(data[0],data[1]);
     }
 }
 
