@@ -8,6 +8,6 @@ script.ps1
 spotifyCreds.json
 
 src/gmail-tools
-spotifyCreds.json
 /.env
 /logs.txt
+*credentials.json

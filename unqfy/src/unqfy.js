@@ -24,7 +24,6 @@ const LogObserver = require('./observer/LogObserver');
 const NewsletterObserver = require('./observer/NewsletterObserver');
 
 
-
 class UNQfy {
  
   constructor(){
@@ -342,15 +341,15 @@ class UNQfy {
      this.deleteTracksFromPlaylists(artista.getTracks());
      this.deleteTracksFromUsers(artista.getTracks());///
      const index = this._artists.indexOf(artista);
-     if (index > -1) {
-      this._artists.splice(index, 1);
-      this.eventManager.notify(this.deleteArtist.name, artista);
-    }else{
-      this.eventManager.notify(this.deleteArtist.name, new ArtistDoesNotExistError() , artistId);
-      throw new ArtistDoesNotExistError;
+      if (index > -1) {
+        this._artists.splice(index, 1);
+        this.eventManager.notify(this.deleteArtist.name, artista);
+      } else {
+        throw new ArtistDoesNotExistError;
+      }
+
     }
   }
-}
 
   deleteTracksFromPlaylists(tracks){//
     this.playlists.forEach(p=> p.removeTracks(tracks));
@@ -368,7 +367,8 @@ class UNQfy {
     if(artist === undefined){
       this.eventManager.notify(this.deleteAlbum.name, new AlbumDoesNotExistError() , albumId);
       throw new AlbumDoesNotExistError;
-    } else{
+    } 
+    else {
       this.deleteTracksFromPlaylists(album.getTracks());//
       this.deleteTracksFromUsers(album.getTracks());///
       artist.removeAlbum(this.getAlbumById(albumId));
@@ -376,6 +376,7 @@ class UNQfy {
       return (`El álbum ha sido eliminado con éxito`);
     }
   }
+  
 
   deleteUser(id){
     const user = this.getUserById(id);
