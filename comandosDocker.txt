@@ -1,5 +1,10 @@
-Build
+#CONFIG
 
+docker volume create unqfy_data
+
+docker network create netUnqfy --subnet=172.18.0.0/24 --gateway=172.18.0.1
+
+#BUILD
 
 docker build -t monitor .
 
@@ -10,8 +15,7 @@ docker build -t newsletter .
 docker build -t unqfy  .
 
 
-
-
+#RUN
 docker run -d -p 8085:8085 --name monitor --user node --net netUnqfy --ip 172.18.0.85 -e API_UNQFY=http://172.18.0.80:8000 -e API_LOGGIN=http://172.18.0.86:8086 -e API_NEWSLETTER=http://172.18.0.87:8087 monitor
 
 docker run -d -p 8086:8086 --name loggin --user node --net netUnqfy  --ip 172.18.0.86  loggin
@@ -23,7 +27,3 @@ docker run -d -p 8087:8087 --name newsletter -e API_UNQFY=http://172.18.0.80:800
 
 
 
-docker volume create unqfy_data
-
-
-docker network create netUnqfy --subnet=172.18.0.0/24 --gateway=172.18.0.1
