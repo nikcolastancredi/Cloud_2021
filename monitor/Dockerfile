@@ -31,7 +31,7 @@ USER node
 
 # Comando por defecto sino se provee uno al hacer docker run
 # El comando corre el servicio
-CMD [ "node", "src/service.js" ]
+CMD [ "node", "src/services.js" ]
 
 # LISTO!
 

@@ -20,7 +20,7 @@ COPY package-lock.json .
 RUN ["npm", "install"]
 
 # Expone el puerto 5002 donde corre la aplicación
-EXPOSE 5002
+EXPOSE 8086
 
 # Le da permisos al usuario node para escribir en /home/node/my_node_app
 # Como comentario, notar que el comando RUN nos permite ejecutar culquier comando bash valido.

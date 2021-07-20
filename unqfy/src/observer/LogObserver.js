@@ -15,7 +15,7 @@ class LogObserver extends EventListener {
     update(eventType, data) {
         console.log(`se agrego el artista ${data[0].name}`);
         const options = {
-            uri: 'http://localhost:5002/api/log',
+            uri: 'http://localhost:8086/api/log',
             body: null,
             json: true
         };
