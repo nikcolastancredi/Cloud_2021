@@ -7,7 +7,7 @@ ENV NODE_ENV=development
 ENV DEBUG=true
 
 # Crea un directorio y nos movemos ahí
-WORKDIR /home/node/monitor
+WORKDIR /home/node/newletter
 
 # Copia el package.json package-lock.json en /home/node/my_node_app
 COPY package.json .
@@ -17,10 +17,13 @@ COPY package-lock.json .
 RUN ["npm", "install"]
 
 # Expone el puerto 5000 donde corre la aplicación
-EXPOSE 8085
+EXPOSE 8087
 
 # Copia los fuentes dentro del container
-COPY . /home/node/monitor/
+COPY . /home/node/newletter/
+
+#RUN cat > /home/node/newletter/client/credentials.json
+#RUN cat > /home/node/newletter/client/token.json
 
 # Le da permisos al usuario node para escribir en /home/node/my_node_app
 # Como comentario, notar que el comando RUN nos permite ejecutar culquier comando bash valido.

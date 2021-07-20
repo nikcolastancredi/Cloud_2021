@@ -14,7 +14,7 @@ class LogObserver extends EventListener {
 
     update(eventType, data) {
         const options = {
-            uri: 'http://localhost:8086/api/log',
+            uri: process.env.API_LOGGIN + '/api/log',
             body: null,
             json: true
         };
