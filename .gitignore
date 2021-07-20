@@ -3,8 +3,11 @@
 *data.json
 visado_1
 script.ps1
+*token.json
+*token.js
+spotifyCreds.json
 
 src/gmail-tools
-spotifyCreds.json
 /.env
 /logs.txt
+*credentials.json

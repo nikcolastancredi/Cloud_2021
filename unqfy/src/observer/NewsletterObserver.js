@@ -1,4 +1,6 @@
 const EventListener = require('./EventListener');
+const NewsletterClient = require('../clientApi/NewsletterClient');
+const newsClient = new NewsletterClient();
 
 class NewsletterObserver extends EventListener {
 
@@ -8,9 +10,16 @@ class NewsletterObserver extends EventListener {
     }
 
     update(eventType, data){
-        console.log(data[0]);
-        console.log(data[1]);
+
         //llamado a la API de Newsletter //POST /api/notify
+        if(eventType==="addAlbum"){
+        newsClient.notifyNewAlbum(data[0],data[1]);
+        }
+        if(eventType==="deleteArtist"){
+        newsClient.notifyDeleteArtist(data[0]);
+    }
+    
+
     }
 }
 
