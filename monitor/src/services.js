@@ -12,25 +12,26 @@ app.use(bodyParse.json());
 app.listen(port, () => console.log('Listening on ' + port));
 
 const services = [
-    { name: 'unqfy', uri: process.env.UNQFY_API_HOST, state: 'offline', lastState: null, time: new Date().getTime() },
-    { name: 'loggin', uri: process.env.LOGGIN_API_HOST, state: 'offline', lastState: null, time: new Date().getTime() },
-    { name: 'newsletter', uri: process.env.NEWSLETTER_API_HOST, state: 'offline', lastState: null, time: new Date().getTime() }
+    { name: 'unqfy', uri: 'http://localhost:8000', state: 'offline', lastState: null, time: new Date().getTime() },
+    { name: 'loggin', uri: 'http://localhost:8086', state: 'offline', lastState: null, time: new Date().getTime() },
+    { name: 'newsletter', uri: 'http://localhost:8087', state: 'offline', lastState: null, time: new Date().getTime() }
 ]
 
 console.log('Monitor activado');
 let interval = setInterval(checkServicesStatus, 5000)
 
-function checkServicesStatus() {
+ function checkServicesStatus() {
     services.forEach(
         service => {
             ClientAPIInstance.check(service.uri).then(
-                response => service.state = 'online'
+                reponse => service.state = 'online'
+
             ).catch(
                 response => service.state = 'offline'
             ).then(
                 response => {
                     service.time = new Date().getTime();
-                    notify(service)
+                    notify(service);
                 }
             )
         }
@@ -39,8 +40,9 @@ function checkServicesStatus() {
 
 function notify(service) {
     if (service.lastState !== service.state) {
-        console.log(`[${new Date(service.time).toLocaleTimeString()}] El servicio ${service.name} se encuentra ${service.state}`);
-        ClientDiscordHookInstance.notify(`[${new Date(service.time).toLocaleTimeString() }] El servicio ${service.name} se encuentra ${service.state}`)
+        console.log(`[${new Date(service.time).toLocaleTimeString()}] 
+        El servicio ${service.name} se encuentra ${service.state}`);
+        ClientDiscordHookInstance.notify(`[${new Date(service.time).toLocaleTimeString() }] El servicio ${service.name} se encuentra ${service.state}`);
         service.lastState = service.state;
     }
 }

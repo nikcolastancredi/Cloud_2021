@@ -28,6 +28,11 @@ app.use('/api', artists, albums, playlists,tracks,users ) ;
 
 const port = process.env.PORT || 8000;
 
+app.get('/api/ping', function (req, res) {
+  res.status(200);
+  res.json("pong");
+});
+
 app.use((req, res, next) => {
     next(new APIError.ResourceNotFound());
 });
@@ -37,7 +42,6 @@ app.use(errorHandler); // Registro de un manejador de errores
 app.listen(port, () => 
   console.log('Running on port: ' + port)
 );
-
 
 
 function valid(data, expectedKeys) {

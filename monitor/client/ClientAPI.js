@@ -13,9 +13,9 @@ class ClientAPI {
         return options;
     }
 
-    check(uriService) {
-        this.options.uri = uriService + '/ping';
-        return rp.get(this.options)
+     check(uriService) {
+        this.options.uri = uriService + '/api/ping';
+        return rp.get(this.options);
     }
 }
 
