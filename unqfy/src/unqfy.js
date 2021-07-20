@@ -24,6 +24,7 @@ const LogObserver = require('./observer/LogObserver');
 const NewsletterObserver = require('./observer/NewsletterObserver');
 
 
+
 class UNQfy {
  
   constructor(){
@@ -46,6 +47,7 @@ class UNQfy {
     this.eventManager.subscribe('deleteAlbum', logObserver);
     this.eventManager.subscribe('deleteTrack', logObserver);
     this.eventManager.subscribe('deleteArtist', logObserver);
+    this.eventManager.subscribe('deleteArtist', newsletterObserver);
     this.eventManager.subscribe('addAlbum', newsletterObserver);
   }
 
