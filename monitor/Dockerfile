@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:14
 # Utiliza la imagen de node 8 como base.
 # A partir de esta imagen se ejecutarán los comandos de abajo creando una nueva imagen.
 

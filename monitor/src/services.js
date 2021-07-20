@@ -12,10 +12,17 @@ app.use(bodyParse.json());
 app.listen(port, () => console.log('Listening on ' + port));
 
 const services = [
-    { name: 'unqfy', uri: 'http://localhost:8000', state: 'offline', lastState: null, time: new Date().getTime() },
-    { name: 'loggin', uri: 'http://localhost:8086', state: 'offline', lastState: null, time: new Date().getTime() },
-    { name: 'newsletter', uri: 'http://localhost:8087', state: 'offline', lastState: null, time: new Date().getTime() }
+    { name: 'unqfy', uri: process.env.API_UNQFY, state: 'offline', lastState: null, time: new Date().getTime() },
+    { name: 'loggin', uri: process.env.API_LOGGIN, state: 'offline', lastState: null, time: new Date().getTime() },
+    { name: 'newsletter', uri: process.env.API_NEWSLETTER, state: 'offline', lastState: null, time: new Date().getTime() }
 ]
+
+// const services = [
+//     { name: 'unqfy', uri: 'http://localhost:8000', state: 'offline', lastState: null, time: new Date().getTime() },
+//     { name: 'loggin', uri: 'http://localhost:8086', state: 'offline', lastState: null, time: new Date().getTime() },
+//     { name: 'newsletter', uri: 'http://localhost:8087', state: 'offline', lastState: null, time: new Date().getTime() }
+// ]
+
 
 console.log('Monitor activado');
 let interval = setInterval(checkServicesStatus, 5000)
