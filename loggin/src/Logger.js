@@ -1,5 +1,5 @@
 const util = require('util'); 
-const loggly  = require('./loggly');
+const loggly  = require('./Loggly');
 const fs = require('fs');
 const writeFilePromise = util.promisify(fs.writeFile);
 const readFilePromise = util.promisify(fs.readFile);

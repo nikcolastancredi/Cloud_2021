@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const app = express();
 const bodyParse = require('body-parser');
-const port = process.env.PORT || 5002;
+const port = process.env.PORT || 8086;
 const Logger = require('./Logger');
 const loggerInstance = new Logger();
 const LogRoute = require('./LogRoute')
