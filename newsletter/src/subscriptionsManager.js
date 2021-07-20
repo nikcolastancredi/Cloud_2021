@@ -2,6 +2,7 @@ const unqfyClient = require('../client/unqfyClient');
 const unqfyClientInstance = new unqfyClient();
 const gmailAPIClient = require('../client/GMailAPIClient');
 const gmailAPIClientInstance = new gmailAPIClient();
+const  errorArtist = require('../errores/ArtistDoesNotExistError');
 
 class SubscriptionsManager {
 
@@ -15,14 +16,17 @@ class SubscriptionsManager {
     }
 
     addSubscriber(artistId, email){
-        this.checkArtist(artistId);
-
-        if( this.subscribers[artistId]==undefined){
-            this.subscribers[artistId]=[];
+        if (unqfyClientInstance.getArtist(artistId) !== undefined){
+            if( this.subscribers[artistId]==undefined){
+                this.subscribers[artistId]=[];
+            }
+            if(! this.subscribers[artistId].some(e => e == email)){
+                this.subscribers[artistId].push(email);
+            }
+        }else{
+            new errorArtist();
         }
-        if(! this.subscribers[artistId].some(e => e == email)){
-            this.subscribers[artistId].push(email);
-        }
+       
 
     }
     
