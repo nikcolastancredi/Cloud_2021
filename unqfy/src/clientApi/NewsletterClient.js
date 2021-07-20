@@ -1,5 +1,5 @@
 const rp = require('request-promise');
-const BASE_URL = 'http://localhost:8087';
+const BASE_URL = process.env.API_UNQFY;
 
 class NewsletterClient{
 
