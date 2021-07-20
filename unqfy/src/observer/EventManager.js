@@ -5,7 +5,6 @@ module.exports = class EventManager {
         const operations = ["addAlbum", "addTrack", "addArtist", "deleteAlbum", "deleteTrack", "deleteArtist"];
         this.listeners = {};
         operations.forEach(o => this.listeners[o] = []);
-        
     }
 
     subscribe(eventType, listener) {
@@ -15,5 +14,5 @@ module.exports = class EventManager {
     notify(eventType, ...data) {
         this.listeners[eventType].forEach(observer => observer.update(eventType, data));
     }
-}
+};
 
