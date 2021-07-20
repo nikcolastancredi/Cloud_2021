@@ -1,5 +1,5 @@
 const rp = require('request-promise');
-const BASE_URL = process.env.API_UNQFY;
+const BASE_URL = process.env.API_NEWSLETTER;
 
 class NewsletterClient{
 
