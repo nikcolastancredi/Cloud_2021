@@ -21,7 +21,7 @@ class UnqfyClient {
             .then( request=>{
                 return request }
             ).catch(err=>{
-                throw new artistError;}
+                throw new artistError();}
         )
 
     }

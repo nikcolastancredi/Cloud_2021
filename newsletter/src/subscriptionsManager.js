@@ -9,17 +9,18 @@ class SubscriptionsManager {
         this.subscribers = {}; // lista de objetos con valores artistaId y email del suscriptor
     }
 
-     checkArtist(artistId){//if artist does not exist throw error
+    checkArtist(artistId){//if artist does not exist throw error
          return unqfyClientInstance.getArtist(artistId);
 
     }
 
     addSubscriber(artistId, email){
-          this.checkArtist(artistId);
+        this.checkArtist(artistId);
+
         if( this.subscribers[artistId]==undefined){
             this.subscribers[artistId]=[];
         }
-        if( this.subscribers[artistId]!=email){
+        if(! this.subscribers[artistId].some(e => e == email)){
             this.subscribers[artistId].push(email);
         }
 
