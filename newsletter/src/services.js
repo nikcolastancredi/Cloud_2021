@@ -103,7 +103,7 @@ app.post('/api/subscriptions', bodyParser.json(),async  (req,res,next) => {
 
 
 
-//DELETE /app/subscriptions
+//DELETE /api/subscriptions
 
 //Elimina todos los emails suscritos a un artista <artistID>// chequea usando API de Unqfy que el artista existe
 app.delete('/api/subscriptions', bodyParser.json(),async  (req,res,next) => {
@@ -125,10 +125,17 @@ app.delete('/api/subscriptions', bodyParser.json(),async  (req,res,next) => {
 });
 
 
+app.get('/api/ping', function (req, res) {
+    res.status(200);
+    res.json("pong");
+  });
+
+
+
 app.use(bodyParser.json());// Parsea el JSON y deja el resultado en req.body
 app.use(bodyParser.urlencoded({ extended:true }));
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8087;
 
 app.use(errorHandler); 
 

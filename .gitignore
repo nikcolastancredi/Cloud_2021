@@ -5,4 +5,5 @@ visado_1
 script.ps1
 *token.json
 *token.js
+*credentials.json
 spotifyCreds.json

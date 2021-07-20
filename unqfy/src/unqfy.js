@@ -23,6 +23,7 @@ const EventManager = require('./observer/EventManager');
 const LogObserver = require('./observer/LogObserver');
 const NewsletterObserver = require('./observer/NewsletterObserver');
 
+const newsletterObserver = new NewsletterObserver();
 
 
 class UNQfy {
@@ -34,7 +35,9 @@ class UNQfy {
     this.users = [];
     this.uniqueId = 0;
     this.eventManager.subscribe('addArtist', new LogObserver());
-    this.eventManager.subscribe('addAlbum', new NewsletterObserver());
+    this.eventManager.subscribe('deleteArtist', newsletterObserver);
+    this.eventManager.subscribe('addAlbum', newsletterObserver);
+
  
   }
 
@@ -325,16 +328,19 @@ class UNQfy {
     const artista = this.getArtistById(artistId);
     
     if(this.artistExists(artista)){
-     this.deleteTracksFromPlaylists(artista.getTracks());
-     this.deleteTracksFromUsers(artista.getTracks());///
-     const index = this._artists.indexOf(artista);
-     if (index > -1) {
-      this._artists.splice(index, 1);
-    }else{
+      this.eventManager.notify(this.deleteArtist.name, artista); ///
+      this.deleteTracksFromPlaylists(artista.getTracks());
+      this.deleteTracksFromUsers(artista.getTracks());
+      const index = this._artists.indexOf(artista);
+      if (index > -1) {
+        this._artists.splice(index, 1);
+      }
+    }
+    else{
       throw new ArtistDoesNotExistError;
     }
+
   }
-}
 
   deleteTracksFromPlaylists(tracks){//
     this.playlists.forEach(p=> p.removeTracks(tracks));
@@ -351,13 +357,15 @@ class UNQfy {
     
     if(artist === undefined){
       throw new AlbumDoesNotExistError;
-    } else{
+    } 
+    else {
       this.deleteTracksFromPlaylists(album.getTracks());//
       this.deleteTracksFromUsers(album.getTracks());///
       artist.removeAlbum(this.getAlbumById(albumId));
       return (`El álbum ha sido eliminado con éxito`);
     }
   }
+  
 
   deleteUser(id){
     const user = this.getUserById(id);
