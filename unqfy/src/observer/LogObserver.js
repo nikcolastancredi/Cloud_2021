@@ -13,7 +13,6 @@ class LogObserver extends EventListener {
     }
 
     update(eventType, data) {
-        console.log(`se agrego el artista ${data[0].name}`);
         const options = {
             uri: 'http://localhost:8086/api/log',
             body: null,
@@ -29,7 +28,9 @@ class LogObserver extends EventListener {
             message: `Se realizo el siguiente evento: ${eventType} con los siguientes datos ${JSON.stringify(data)}`,
             levelMessage: 'info'};
         }
-        return rp.post(this.options);
+        rp.post(this.options)
+        .then(() => console.log('Enviado a LogApi'))
+        .catch(() => console.log('error de envio a LogApi'));
     }
 }
 
